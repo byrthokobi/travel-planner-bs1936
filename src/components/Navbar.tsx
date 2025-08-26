@@ -5,8 +5,8 @@ export const Navbar: React.FC = () => {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Toolbar sx={{
-                backgroundColor: '#424242',
-                color: '#fff',
+                backgroundColor: '#b1326dff',
+                color: '#000000ff',
                 display: 'flex',
                 justifyContent: 'space-around',
                 padding: '10px 20px'
