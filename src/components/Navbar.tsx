@@ -15,8 +15,8 @@ export const Navbar: React.FC = () => {
                     My App
                 </Typography>
                 <Box>
-                    <Button color="inherit">Home</Button>
-                    <Button color="inherit">About</Button>
+                    <Button color="inherit" href='/'>Home</Button>
+                    <Button color="inherit" href='/itinerary'>Itinerary</Button>
                     <Button color="inherit">Contact</Button>
                 </Box>
             </Toolbar>

@@ -2,7 +2,7 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
 
 export default function WeatherChart({ forecast }: { forecast: any }) {
-    // Transform API data into chart-friendly array
+
     const data = forecast.time.map((date: string, i: number) => ({
         date,
         max: forecast.temperature_2m_max[i],

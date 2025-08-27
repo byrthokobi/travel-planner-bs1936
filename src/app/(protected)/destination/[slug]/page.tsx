@@ -1,6 +1,7 @@
 import { Grid3x3 } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Container, Grid, Typography } from "@mui/material";
 import WeatherChart from "./WeatherComponent";
+import DatePickerModal from "./DatePickerModal";
 
 async function getCountryData(countryName: string) {
     const res = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
@@ -29,7 +30,6 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
     const country = await getCountryData(countryName);
 
-    // 2. Fetch weather forecast if lat/lon available
     let weatherData: any = null;
     if (country.lat && country.lon) {
         weatherData = await getWeather(country.lat, country.lon);
@@ -44,7 +44,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                 <Typography variant="h4">
                     Welcome to the beautiful country named {countryName} !
                 </Typography>
-                <Button variant="contained">Add Destination</Button>
+                <DatePickerModal countryName={countryName} lat={country.lat} lon={country.lon} />
             </Box>
 
             {/* Country Details Section */}
@@ -70,7 +70,6 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                     <CardContent>
                         <Typography variant="h5">Weather Forecast</Typography>
                         <Typography>Current: {weatherData.current_weather.temperature}°C</Typography>
-                        {/* Pass forecast to a client component chart */}
                         <WeatherChart forecast={weatherData.daily} />
                     </CardContent>
                 </Card>

@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "Trip" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "location" TEXT NOT NULL,
+    "startDate" DATETIME NOT NULL,
+    "endDate" DATETIME NOT NULL,
+    "weatherSummary" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
