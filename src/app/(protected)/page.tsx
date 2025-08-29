@@ -1,9 +1,11 @@
 'use client'
 
+import { auth } from "@/lib/auth";
 import { Button, Container, Typography, Box, TextField, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 
 const fetchCities = async (query: string) => {
@@ -20,7 +22,11 @@ const fetchCities = async (query: string) => {
 
 const DashboardPage = () => {
     const router = useRouter();
+    const { data: session, status } = useSession();
     const [query, setQuery] = useState('');
+    const [loading, setLoading] = useState(false);
+
+
 
     const { data: results = [], isFetching, isError } = useQuery({
         queryKey: ["countries", query],
@@ -28,10 +34,23 @@ const DashboardPage = () => {
         enabled: query.length > 0,
     });
 
+    // if (!session) redirect('/login');
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/login");
+        }
+    }, [status, router]);
 
     const handleLogOut = () => {
-        localStorage.removeItem('isAuth');
-        router.push('/login');
+        signOut({ callbackUrl: "/login" });
+    };
+
+    if (status === "loading") {
+        return <CircularProgress />;
+    }
+
+    if (status === "unauthenticated") {
+        return null;
     }
 
 

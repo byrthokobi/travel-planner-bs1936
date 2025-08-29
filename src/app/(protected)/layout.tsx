@@ -1,18 +1,20 @@
 'use client'
 
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
+    const { data: session, status } = useSession();
     const router = useRouter();
 
     useEffect(() => {
-        const isAuthenticated = localStorage.getItem('isAuth') === 'true';
-        if (!isAuthenticated) {
+        if (status === "unauthenticated") {
             router.push('/login');
         }
-    }, [router]);
+    }, [status, router]);
 
-    const isAuthenticated = typeof window !== 'undefined' && localStorage.getItem('isAuth') === 'true';
-    return isAuthenticated ? <div>{children}</div> : null;
+    if (status === "loading") return null; // or a loading spinner
+    if (status === "unauthenticated") return null;
+    return <div>{children}</div>;
 }

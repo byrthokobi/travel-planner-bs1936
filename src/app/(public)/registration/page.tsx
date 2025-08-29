@@ -24,15 +24,13 @@ const SignupPage = () => {
                 body: JSON.stringify({ email, fullname, password }),
             });
 
+
             const data = await res.json();
             if (!res.ok) {
                 setError(data.error || 'Something went wrong');
             } else {
                 setSuccess('Account created successfully! Redirecting...');
-                // Optionally redirect to login after 2 sec
-                setTimeout(() => {
-                    window.location.href = '/login';
-                }, 2000);
+                window.location.href = '/login'
             }
         } catch (error) {
             setError('Network error. Please try again.');
