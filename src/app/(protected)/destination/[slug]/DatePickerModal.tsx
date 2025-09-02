@@ -5,13 +5,13 @@ import { DatePicker, DateRange, DateRangePicker, LocalizationProvider } from "@m
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import { redirect } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 interface DatePickerModalProps {
     countryName: string;
-    currentTemperature: number;
+    currentTemperature: string;
     userId: string | number;
 }
 
@@ -48,7 +48,7 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
         setSaving(true);
 
         try {
-            const weatherSummary = currentTemperature.toString();
+            let weatherSummary: string = currentTemperature;
 
             const response = await fetch("/api/trips", {
                 method: "POST",
@@ -116,17 +116,13 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
                             value={endDate}
                             onChange={(newDate) => setEndDate(newDate)}
                             disablePast
-                            minDate={startDate || undefined} // cannot pick before startDate
+                            minDate={startDate || undefined}
                             sx={{ mt: 2 }}
                         />
                     </LocalizationProvider>
 
-                    {/* Display current temperature for confirmation */}
 
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-                        <Typography variant="body2" sx={{ mt: 2 }}>
-                            Current Temperature: {currentTemperature}°C
-                        </Typography>
                         <Button onClick={() => setOpen(false)} sx={{ mr: 2 }} disabled={saving}>
                             Cancel
                         </Button>

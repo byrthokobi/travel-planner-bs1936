@@ -146,8 +146,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                     </div>
                 </div>
             </div>
-
-            <DatePickerModal countryName={countryName} currentTemperature={currentTemperature} userId={Number(userId)} />
+            <DatePickerModal countryName={countryName} currentTemperature={weatherData.current_weather.temperature} userId={Number(userId)} />
 
             {/* Weather Section */}
             {weatherData && (
