@@ -3,25 +3,24 @@
 import React, { useEffect, useState } from 'react'
 import { signIn, useSession } from "next-auth/react";
 import { redirect, useRouter } from 'next/navigation';
-import { GithubSignIn } from '@/components/github-sign-in';
-import { auth } from '@/lib/auth';
 import { Globe, MapPin, Plane } from 'lucide-react';
 
 const LoginPage = () => {
     const { data: session, status } = useSession();
-
-    if (status === "loading") return null;
-    if (status === "authenticated") {
-        redirect("/");
-        return null;
-    }
+    const router = useRouter();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        if (status === "authenticated") {
+            router.replace("/");
+        }
+    }, [status, router]);
+
+    if (status === "loading") return null;
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,14 +30,12 @@ const LoginPage = () => {
             email,
             password,
         });
-
-        setLoading(false);
         if (res?.error) {
-            setError(res.error); // display error
+            setError(res.error);
         } else if (res?.ok) {
-            // Redirect to home page
             router.push("/");
         }
+        setLoading(false);
     };
 
 
@@ -68,7 +65,7 @@ const LoginPage = () => {
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <Plane className="w-8 h-8 text-white rotate-12" />
                         </div>
-                        <h1 className="text-3xl font-bold text-white mb-2">Welcome the Adventure</h1>
+                        <h2 className="text-2xl font-bold text-white mb-2">Let's Plan Trips</h2>
                         <p className="text-white/80 text-sm">Login and start exploring</p>
                     </div>
 
@@ -80,7 +77,7 @@ const LoginPage = () => {
                                 placeholder="Email Address"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-blue-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
@@ -94,7 +91,7 @@ const LoginPage = () => {
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-pink-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
@@ -103,13 +100,13 @@ const LoginPage = () => {
 
                         {/* Sign In Button */}
                         <button
-                            type="button"
+                            type="submit"
                             onClick={handleLogin}
                             disabled={loading}
                             className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-semibold py-4 rounded-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 active:scale-95 relative overflow-hidden group"
                         >
                             <span className="relative z-10 flex items-center justify-center">
-                                Login
+                                {loading ? 'Logging In...' : 'Login'}
                                 <Plane className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                             </span>
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

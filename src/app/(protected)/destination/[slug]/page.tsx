@@ -1,4 +1,3 @@
-import { Grid3x3 } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Container, Grid, Typography } from "@mui/material";
 import WeatherChart from "./WeatherComponent";
 import DatePickerModal from "./DatePickerModal";
@@ -9,9 +8,11 @@ import { Clock, Flag, MapPin, Users } from "lucide-react";
 async function getCountryData(countryName: string) {
     const res = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
     const data = await res.json();
+    console.log(data);
     const country = data[0];
     return {
         name: country.name.common,
+        capital: country.capital,
         population: country.population,
         timezone: country.timezones?.[0] || "N/A",
         flag: country.flags?.png || "",
@@ -31,7 +32,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
     const session = await auth();
     if (!session) {
-        redirect("/login"); // Redirect non-logged-in users
+        redirect("/login");
     }
     const { slug } = await params;
     const countryName = decodeURIComponent(slug);
@@ -40,18 +41,16 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
     const country = await getCountryData(countryName);
 
     let weatherData: any = null;
+    let currentTemperature = 0;
     if (country.lat && country.lon) {
         weatherData = await getWeather(country.lat, country.lon);
+        if (weatherData && weatherData.current_weather) {
+            currentTemperature = weatherData.current_weather.temperature;
+        }
     }
+
     return (
         <Container>
-            <Box sx={{
-                marginTop: '12px'
-            }}>
-                <Typography variant="h4">
-                    Welcome to the beautiful country named {countryName} !
-                </Typography>
-            </Box>
 
             {/* Country Details Section */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mt-8 hover:shadow-xl transition-shadow duration-300">
@@ -60,7 +59,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                     <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center mr-3">
                         <MapPin className="w-5 h-5 text-white" />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-800">Country Details</h2>
+                    <h2 className="text-xl font-bold text-black-800 dark:text-black">Country Details</h2>
                 </div>
 
                 {/* Content Grid */}
@@ -129,8 +128,8 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                 <div className="mt-6 pt-6 border-t border-gray-100">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                         <div className="p-3 bg-blue-50 rounded-xl">
-                            <p className="text-2xl font-bold text-blue-600">{country.name.length}</p>
-                            <p className="text-xs text-blue-600 font-medium uppercase tracking-wide">Name Length</p>
+                            <p className="text-2xl font-bold text-blue-600">{country.capital}</p>
+                            <p className="text-xs text-blue-600 font-medium uppercase tracking-wide">Capital City</p>
                         </div>
                         <div className="p-3 bg-green-50 rounded-xl">
                             <p className="text-2xl font-bold text-green-600">
@@ -148,7 +147,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                 </div>
             </div>
 
-            <DatePickerModal countryName={countryName} lat={country.lat} lon={country.lon} userId={Number(userId)} />
+            <DatePickerModal countryName={countryName} currentTemperature={currentTemperature} userId={Number(userId)} />
 
             {/* Weather Section */}
             {weatherData && (

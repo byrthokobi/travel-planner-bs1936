@@ -25,8 +25,7 @@ const DashboardPage = () => {
     const { data: session, status } = useSession();
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
-
-
+    const [navigating, setNavigating] = useState(false);
 
     const { data: results = [], isFetching, isError } = useQuery({
         queryKey: ["countries", query],
@@ -34,16 +33,11 @@ const DashboardPage = () => {
         enabled: query.length > 0,
     });
 
-    // if (!session) redirect('/login');
     useEffect(() => {
         if (status === "unauthenticated") {
             router.push("/login");
         }
     }, [status, router]);
-
-    const handleLogOut = () => {
-        signOut({ callbackUrl: "/login" });
-    };
 
     if (status === "loading") {
         return <CircularProgress />;
@@ -56,22 +50,18 @@ const DashboardPage = () => {
 
     return (
         <Container>
-            <Box sx={{ display: 'flex', justifyContent: 'space-around', marginTop: '10px' }}>
-                <Typography variant="h3" component="h4">Welcome to Dashboard!</Typography>
-                <Button variant="outlined" onClick={handleLogOut} sx={{ height: "40px" }}>Logout</Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-around', marginTop: '2rem' }}>
+                <h2 className="text-xl md:text-2xl lg:text-3xl">Plan Your Next Trip!</h2>
             </Box>
 
-            <Box sx={{
-                width: "50%",
-                margin: "auto"
-            }}>
+            <Box className="travel-input" sx={{ margin: 'auto', marginTop: 5 }}>
                 <Box sx={{
                     display: 'flex',
                     gap: '12px',
                     marginTop: '1rem',
                 }}>
                     <TextField
-                        label="Search Places"
+                        label="Find Your Next Destination"
                         variant="outlined"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
@@ -89,13 +79,20 @@ const DashboardPage = () => {
                     borderRadius: "2",
                     p: "1",
                     backgroundColor: "whitesmoke",
-                    display: query.length > 0 ? 'block' : 'none'
+                    display: query.length > 0 ? 'block' : 'none',
+                    filter: navigating ? "blur(4px)" : "none",
+                    pointerEvents: navigating ? "none" : "auto",
+                    transition: "filter 0.2s ease-in-out"
                 }}>
                     {results.map((country, idx) => (
                         <ListItem
                             key={idx}
                             button
-                            onClick={() => router.push(`/destination/${country.name}`)}
+                            onClick={() => {
+                                setNavigating(true);
+                                router.push(`/destination/${country.name}`)
+                            }
+                            }
                             sx={{ cursor: "pointer" }}
                         >
                             <ListItemText

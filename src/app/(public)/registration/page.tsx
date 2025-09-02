@@ -1,15 +1,57 @@
 'use client'
 
-import React, { useState } from 'react';
-import { Plane, MapPin, Globe } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Plane, MapPin, Globe, User } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const SignupPage = () => {
+
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullname, setFullname] = useState('');
+    const [avatar, setAvatar] = useState<File | null>(null);
+    const [sex, setSex] = useState('');
+    const [country, setCountry] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            router.replace("/");
+        }
+    }, [status, router]);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setError('');
+        const file = e.target.files?.[0];
+
+        if (!file) {
+            setAvatar(null);
+            return;
+        }
+
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            setError('Invalid file type. Please upload a JPEG, PNG, GIF, or WEBP image.');
+            setAvatar(null);
+            return;
+        }
+
+        const maxSize = 1024 * 1024;
+        if (file.size > maxSize) {
+            setError('Image size exceeds 1MB. Please choose a smaller file.');
+            setAvatar(null);
+            return;
+        }
+
+        setAvatar(file);
+    };
 
 
     const handleRegistration = async () => {
@@ -17,27 +59,48 @@ const SignupPage = () => {
         setError('');
         setSuccess('');
 
+        if (!avatar) {
+            setError('Please upload a profile picture.');
+            setLoading(false);
+            toast.error("Please Upload a Picture");
+            return;
+        }
+
+
+        // console.log("Ok, this works2");
+
         try {
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('fullname', fullname);
+            formData.append('password', password);
+            formData.append('sex', sex);
+            formData.append('country', country);
+            formData.append('avatar', avatar);
+
+            console.log(formData);
+
             const res = await fetch('/api/register', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, fullname, password }),
+                body: formData,
             });
 
+            console.log(res);
 
             const data = await res.json();
             if (!res.ok) {
                 setError(data.error || 'Something went wrong');
             } else {
-                setSuccess('Account created successfully! Redirecting...');
+                setSuccess('Account created successfully!');
                 window.location.href = '/login'
             }
         } catch (error) {
+            console.error(error);
             setError('Network error. Please try again.');
         } finally {
             setLoading(false);
         }
-    }
+    };
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center p-4">
             {/* Background Pattern */}
@@ -66,6 +129,30 @@ const SignupPage = () => {
                         </div>
                         <h1 className="text-3xl font-bold text-white mb-2">Join the Adventure</h1>
                         <p className="text-white/80 text-sm">Create your account and start exploring</p>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center space-y-4">
+                        <label htmlFor="avatar-upload" className="relative cursor-pointer">
+                            <span className="inline-block w-24 h-24 rounded-full overflow-hidden border-2 border-white/50 transition-all duration-300 group hover:scale-110 shadow-lg">
+                                {avatar ? (
+                                    <img src={URL.createObjectURL(avatar)} alt="Avatar Preview" className="h-full w-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-white/10 text-white/50">
+                                        <User className="w-12 h-12" />
+                                    </div>
+                                )}
+                            </span>
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity duration-300 hover:opacity-100 rounded-full">
+                                <span className="text-white text-sm font-semibold">Upload</span>
+                            </div>
+                        </label>
+                        <input
+                            id="avatar-upload"
+                            type="file"
+                            className="sr-only"
+                            onChange={handleFileChange}
+                            accept="image/jpeg, image/png, image/gif, image/webp"
+                        />
                     </div>
 
                     {/* Form */}
@@ -106,6 +193,35 @@ const SignupPage = () => {
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-pink-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+                        </div>
+
+                        <div className="relative group">
+                            <select
+                                value={sex}
+                                onChange={(e) => setSex(e.target.value)}
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                            >
+                                <option value="" disabled hidden>Select Sex</option>
+                                <option value="Male" className="bg-purple-500/80 text-white">Male</option>
+                                <option value="Female" className="bg-purple-500/80 text-white">Female</option>
+                            </select>
+
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                                <div className="w-2 h-2 bg-purple-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+                        </div>
+
+                        <div className="relative group">
+                            <input
+                                type="text"
+                                placeholder="Country"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                            />
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                                <div className="w-2 h-2 bg-purple-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
                             </div>
                         </div>
 

@@ -4,62 +4,88 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { DatePicker, DateRange, DateRangePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { Dayjs } from "dayjs";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface DatePickerModalProps {
     countryName: string;
-    lat: number;
-    lon: number;
+    currentTemperature: number;
     userId: string | number;
 }
 
-export default function DatePickerModal({ countryName, lat, lon, userId }: DatePickerModalProps) {
+export default function DatePickerModal({ countryName, currentTemperature, userId }: DatePickerModalProps) {
     const [open, setOpen] = useState(false);
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
     const [endDate, setEndDate] = useState<Dayjs | null>(null);
     const [saving, setSaving] = useState(false);
+    const router = useRouter();
 
-    const fetchWeather = async () => {
-        try {
-            const res = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`
-            );
-            const data = await res.json();
-            return data?.current_weather?.temperature ?? "N/A";
-        } catch (err) {
-            console.error("Failed to fetch weather:", err);
-            return "N/A";
-        }
-    };
+    // const fetchWeather = async () => {
+    //     try {
+    //         const res = await fetch(
+    //             `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`
+    //         );
+    //         const data = await res.json();
+    //         return data?.current_weather?.temperature ?? "N/A";
+    //     } catch (err) {
+    //         console.error("Failed to fetch weather:", err);
+    //         return "N/A";
+    //     }
+    // };
     const handleSave = async () => {
-        if (!startDate || !endDate) return alert("Please select both Start and End Dates");
-        if (endDate.isBefore(startDate)) return alert("End Date cannot be before Start Date");
+        if (!startDate || !endDate) {
+            toast.error("Please select both Start and End Dates");
+            return;
+        }
+
+        if (endDate.isBefore(startDate)) {
+            toast.error("End Date cannot be before Start Date");
+            return;
+        }
 
         setSaving(true);
-        const weatherSummary = await fetchWeather();
-        await fetch("/api/trips", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                userId,
-                location: countryName,
-                startDate: startDate.toISOString(),
-                endDate: endDate.toISOString(),
-                weatherSummary
-            })
-        });
 
-        setSaving(false);
-        setOpen(false);
-        setStartDate(null);
-        setEndDate(null);
+        try {
+            const weatherSummary = currentTemperature.toString();
+
+            const response = await fetch("/api/trips", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId,
+                    location: countryName,
+                    startDate: startDate.toISOString(),
+                    endDate: endDate.toISOString(),
+                    weatherSummary
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to save trip: ${response.statusText}`);
+            }
+
+            toast.success("Trip Added Successfully!");
+            setOpen(false);
+            setStartDate(null);
+            setEndDate(null);
+
+            // Use router.push instead of redirect for client-side navigation
+            router.push("/");
+        } catch (error) {
+            console.error("Error saving trip:", error);
+            toast.error("Failed to save trip. Please try again.");
+        } finally {
+            setSaving(false);
+        }
     }
 
     return (
         <>
-            <Button variant="contained" onClick={() => setOpen(true)} sx={{ mt: 2, width: "50%" }}>
+            <button className="btn-secondary mt-3 w-full" onClick={() => setOpen(true)}>
                 Add Destination
-            </Button>
+            </button>
 
             <Modal open={open} onClose={() => setOpen(false)}>
                 <Box
@@ -95,7 +121,12 @@ export default function DatePickerModal({ countryName, lat, lon, userId }: DateP
                         />
                     </LocalizationProvider>
 
+                    {/* Display current temperature for confirmation */}
+
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+                        <Typography variant="body2" sx={{ mt: 2 }}>
+                            Current Temperature: {currentTemperature}°C
+                        </Typography>
                         <Button onClick={() => setOpen(false)} sx={{ mr: 2 }} disabled={saving}>
                             Cancel
                         </Button>

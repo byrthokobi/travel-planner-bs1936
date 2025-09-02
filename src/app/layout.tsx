@@ -2,9 +2,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Container } from "@mui/material";
-import { Navbar } from "@/components/Navbar";
 import Providers from "./providers";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { cookies } from "next/headers";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,14 +23,18 @@ export const metadata: Metadata = {
   description: "Your Very Own Travel Helper!",
 };
 
-export default function RootLayout({
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
 
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get("theme")?.value;
+
   return (
-    <html lang="en">
+    <html lang="en" className={themeCookie === "dark" ? "dark" : ""}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -36,6 +42,7 @@ export default function RootLayout({
           <Providers>
             {children}
           </Providers>
+          <ToastContainer position="top-right" autoClose={2000} />
         </div>
       </body>
     </html>
