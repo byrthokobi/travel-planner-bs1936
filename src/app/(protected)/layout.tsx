@@ -14,7 +14,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         }
     }, [status, router]);
 
-    if (status === "loading") return null; // or a loading spinner
+    if (status === "loading") return null;
     if (status === "unauthenticated") return null;
     return <div>{children}</div>;
 }

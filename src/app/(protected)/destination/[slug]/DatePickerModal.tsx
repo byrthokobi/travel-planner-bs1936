@@ -91,7 +91,7 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
                 <Box
                     sx={{
                         position: "absolute",
-                        bottom: "10%", // Appear from bottom
+                        bottom: "10%",
                         left: "50%",
                         transform: "translateX(-50%)",
                         bgcolor: "background.paper",

@@ -152,6 +152,7 @@ const SignupPage = () => {
                             className="sr-only"
                             onChange={handleFileChange}
                             accept="image/jpeg, image/png, image/gif, image/webp"
+                            required
                         />
                     </div>
 

@@ -1,14 +1,21 @@
 'use client'
 
 import { auth } from "@/lib/auth";
-import { Button, Container, Typography, Box, TextField, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
+import { Button, Container, Typography, Box, TextField, CircularProgress, List, ListItem, ListItemText, ListItemButton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { signOut, useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+interface Country {
+    name: string;
+    capital: string;
+    region: string;
+    flag: string;
+}
 
-const fetchCities = async (query: string) => {
+
+const fetchCities = async (query: string): Promise<(Country[])> => {
     if (!query) return [];
     const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
     const data = await res.json();
@@ -33,20 +40,9 @@ const DashboardPage = () => {
         enabled: query.length > 0,
     });
 
-    useEffect(() => {
-        if (status === "unauthenticated") {
-            router.push("/login");
-        }
-    }, [status, router]);
-
     if (status === "loading") {
         return <CircularProgress />;
     }
-
-    if (status === "unauthenticated") {
-        return null;
-    }
-
 
     return (
         <Container>
@@ -84,10 +80,9 @@ const DashboardPage = () => {
                     pointerEvents: navigating ? "none" : "auto",
                     transition: "filter 0.2s ease-in-out"
                 }}>
-                    {results.map((country, idx) => (
-                        <ListItem
+                    {results.map((country: Country, idx) => (
+                        <ListItemButton
                             key={idx}
-                            button
                             onClick={() => {
                                 setNavigating(true);
                                 router.push(`/destination/${country.name}`)
@@ -106,7 +101,7 @@ const DashboardPage = () => {
                                     style={{ width: "30px", marginLeft: "10px" }}
                                 />
                             )}
-                        </ListItem>
+                        </ListItemButton>
                     ))}
                 </List>
             </Box>

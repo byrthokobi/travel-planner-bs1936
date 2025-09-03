@@ -26,7 +26,6 @@ export async function POST(req: Request) {
     const country = formData.get("country") as string;
     const avatar = formData.get("avatar") as File | null;
 
-    // Validate fields
     const validationResult = registerSchema.safeParse({ email, fullname, password });
     if (!validationResult.success) {
       const issues = validationResult.error.issues ?? [];
@@ -41,14 +40,11 @@ export async function POST(req: Request) {
     if (!avatar.type.startsWith("image/")) {
       return NextResponse.json({ error: 'Invalid file type. Only images are allowed.' }, { status: 400 });
     }
-
-    // Check if email already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 400 });
     }
 
-    // Upload avatar to Cloudinary
     const arrayBuffer = await avatar.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 

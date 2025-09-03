@@ -9,7 +9,7 @@ import {PrismaAdapter} from "@auth/prisma-adapter"
 export const { auth, handlers, signIn } = NextAuth({
     adapter: PrismaAdapter(prisma),
     session: {
-        strategy: "jwt", // default in NextAuth v5, but set explicitly
+        strategy: "jwt",
     },
     providers: [
         GitHub({
@@ -22,11 +22,18 @@ export const { auth, handlers, signIn } = NextAuth({
                 password: {}
             },
             authorize: async(credentials) => {
-                if (!credentials?.email || !credentials?.password) {
+                const email = credentials?.email as string;
+                const password = credentials?.password as string;
+                
+                if (!email || !password) {
                     throw new Error("Missing email or password");
                 }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    throw new Error("Invalid email format.");
+                }
+
                 const user = await prisma.user.findFirst({
-                    where: { email: credentials.email as string},
+                    where: { email: email},
                 });
 
                 if(!user) {
@@ -34,21 +41,20 @@ export const { auth, handlers, signIn } = NextAuth({
                 }
 
                 const isPasswordValid = await bcrypt.compare(
-                    credentials.password as string,
+                    password,
                     user.password as string
                 );
 
                 if (!isPasswordValid) {
-                    throw new Error("Invalid password");
+                    throw new Error("Incorrect email or password");
                 }
                 
-                return { id: user.id, email: user.email, name: user.fullname ?? null };
+                return { id: user.id.toString(), email: user.email, name: user.fullname ?? null };
             }
         }),
     ],
     callbacks: {
     async jwt({ token, user }) {
-      // When user logs in, persist their info in token
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -57,7 +63,6 @@ export const { auth, handlers, signIn } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      // Make token fields available in session.user
       if (session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;

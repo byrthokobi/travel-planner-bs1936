@@ -99,11 +99,11 @@ export default function ItineraryPage() {
         tripLocation: "",
     });
 
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            router.push("/login");
-        }
-    }, [status, router]);
+    // useEffect(() => {
+    //     if (status === 'unauthenticated') {
+    //         router.push("/login");
+    //     }
+    // }, [status, router]);
 
     useEffect(() => {
         async function fetchTrips() {
@@ -124,9 +124,9 @@ export default function ItineraryPage() {
         const { key, direction } = sortConfig;
         let comparison = 0;
 
-        if (key === "startDate" || key === "endDate" || key === "createdAt") {
+        if (key === "startDate") {
             comparison = new Date(a[key]).getTime() - new Date(b[key]).getTime();
-        } else if (key === "location" || key === "weatherSummary") {
+        } else if (key === "location") {
             comparison = a[key]?.localeCompare(b[key] || "") || 0;
         }
 

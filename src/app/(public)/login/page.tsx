@@ -24,6 +24,16 @@ const LoginPage = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!email || !password) {
+            setError('Email and password are required.');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setError('Please enter a valid email address.');
+            return;
+        }
+
         setLoading(true);
         const res = await signIn("credentials", {
             redirect: false,
@@ -82,6 +92,7 @@ const LoginPage = () => {
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-blue-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
                             </div>
+                            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
                         </div>
 
 
@@ -96,6 +107,7 @@ const LoginPage = () => {
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-pink-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
                             </div>
+                            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
                         </div>
 
                         {/* Sign In Button */}

@@ -3,6 +3,11 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
 import { Thermometer } from 'lucide-react';
 
+interface TempData {
+    max: number;
+    min: number;
+}
+
 export default function WeatherChart({ forecast }: { forecast: any }) {
     const data = forecast.time.map((date: string, i: number) => ({
         date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
@@ -10,7 +15,6 @@ export default function WeatherChart({ forecast }: { forecast: any }) {
         min: forecast.temperature_2m_min[i]
     }));
 
-    // Custom tooltip
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
@@ -27,7 +31,7 @@ export default function WeatherChart({ forecast }: { forecast: any }) {
         return null;
     };
 
-    const avgTemp = Math.round(data.reduce((sum, item) => sum + (item.max + item.min) / 2, 0) / data.length);
+    const avgTemp = Math.round(data.reduce((sum: number, item: TempData) => sum + (item.max + item.min) / 2, 0) / data.length);
 
     return (
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">

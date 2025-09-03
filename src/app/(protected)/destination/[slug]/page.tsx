@@ -31,9 +31,9 @@ async function getWeather(lat: number, lon: number) {
 export default async function DestinationPage({ params }: { params: Promise<{ slug: string }> }) {
 
     const session = await auth();
-    if (!session) {
-        redirect("/login");
-    }
+    // if (!session) {
+    //     redirect("/login");
+    // }
     const { slug } = await params;
     const countryName = decodeURIComponent(slug);
     const userId = session?.user?.id;

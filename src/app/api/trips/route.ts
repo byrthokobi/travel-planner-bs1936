@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Use `connect` to link the trip to the user
+    
     const trip = await prisma.trip.create({
       data: {
         location,
