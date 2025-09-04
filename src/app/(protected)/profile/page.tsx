@@ -17,11 +17,11 @@ interface User {
 export default async function ProfilePage() {
     const session = await auth();
 
-    if (!session || !session.user?.email) {
-        redirect("/login");
-    }
+    // if (!session || !session.user?.email) {
+    //     redirect("/login");
+    // }
 
-    const userEmail = session?.user?.email;
+    const userEmail = session?.user?.email ?? '';
 
     const user = await prisma.user.findUnique({
         where: { email: userEmail },

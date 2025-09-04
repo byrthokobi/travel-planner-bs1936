@@ -89,7 +89,7 @@ export default function ProfileClient({ user: initialUser }: ProfileClientProps)
                                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
                                     Welcome, {user.fullname}!
                                 </h1>
-                                <p className="text-gray-600 text-base sm:text-lg mb-4">Ready for your next adventure?</p>
+                                <p className="text-base sm:text-lg mb-4">Ready for your next adventure?</p>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                                     <div className="country-detail-item break-all">

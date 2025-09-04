@@ -12,7 +12,7 @@ async function getCountryData(countryName: string) {
         console.log(data);
         const country = data[0];
         return {
-            name: country.name.common,
+            name: country?.name?.common,
             capital: country.capital,
             population: country.population,
             timezone: country.timezones?.[0] || "N/A",
@@ -22,15 +22,20 @@ async function getCountryData(countryName: string) {
         }
     } catch (err) {
         console.error(err);
-        return null;
+        redirect('/error');
     }
 }
 
 async function getWeather(lat: number, lon: number) {
-    const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`
-    );
-    return res.json();
+    try {
+        const res = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`
+        );
+        return res.json();
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
 }
 
 export default async function DestinationPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -44,7 +49,6 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
     const userId = session?.user?.id;
 
     const country = await getCountryData(countryName);
-
     let weatherData: any = null;
     let currentTemperature = 0;
     if (country?.lat && country?.lon) {
@@ -58,7 +62,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
         <Container>
 
             {/* Country Details Section */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mt-8 hover:shadow-xl transition-shadow duration-300">
+            <div className="country-detail rounded-2xl shadow-lg border border-gray-100 p-6 mt-8">
                 {/* Header */}
                 <div className="flex items-center mb-6">
                     <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center mr-3">
@@ -151,13 +155,13 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                     </div>
                 </div>
             </div>
-            <DatePickerModal countryName={countryName} currentTemperature={weatherData.current_weather.temperature} userId={Number(userId)} />
+            <DatePickerModal countryName={countryName} currentTemperature={weatherData?.current_weather?.temperature} userId={Number(userId)} />
 
             {/* Weather Section */}
             {weatherData && (
-                <Card sx={{ marginTop: 4 }}>
-                    <CardContent>
-                        <Typography variant="h5">Weather Forecast</Typography>
+                <Card sx={{ marginTop: 4, background: "transparent" }}>
+                    <CardContent className="weather-card">
+                        <h2>Weather Forecast</h2>
                         <Typography>Current: {weatherData.current_weather.temperature}°C</Typography>
                         <WeatherChart forecast={weatherData.daily} />
                     </CardContent>

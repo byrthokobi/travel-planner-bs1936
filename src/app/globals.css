@@ -45,6 +45,27 @@ body {
   color: #f1f5f9;
 }
 
+/* DatePicker Modal */
+
+.modal-body {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.dark .modal-body {
+  background: #bac5d4;
+}
+
+.dark .modal-text {
+  color: black;
+}
 /* Typography Enhancements */
 h1,
 h2,
@@ -157,6 +178,15 @@ h3 {
   background-color: #374151;
 }
 
+/* Table Design */
+.table-body:hover {
+  background-color: #cbd5e1;
+}
+
+.dark .table-body:hover {
+  background-color: #2a5298;
+}
+
 /* Card Styles */
 .travel-card {
   background: white;
@@ -169,7 +199,7 @@ h3 {
 }
 
 .travel-card:hover {
-  transform: translateY(-4px);
+  /* transform: translateY(-4px); */
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
@@ -236,13 +266,17 @@ h3 {
 }
 
 .dark .travel-input:focus {
-  border-color: var(--travel-primary);
+  border-color: white;
   box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
 }
 
 .dark .travel-input::placeholder {
   color: #ffffff;
 }
+
+/* .dark .input-field {
+  background: whitesmoke;
+} */
 
 /* Layout Utilities */
 .container-travel {
@@ -413,20 +447,23 @@ h3 {
 }
 
 /* Country Details Specific Styles */
+
+.country-detail {
+  background: rgb(176, 228, 228);
+}
+
+.dark .country-detail {
+  background: #6b7280;
+}
 .country-detail-item {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: aliceblue;
   border-radius: 1rem;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
-  margin-bottom: 0.75rem;
+  padding: 15px;
+  display: flex;
 }
 
 .country-detail-item:hover {
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-  transform: translateX(4px);
   border-color: var(--travel-primary);
 }
 
@@ -538,6 +575,39 @@ h3 {
     height: 53px;
   }
 }
+/* Weather Section */
+
+/* .dark .weather-card h2 {
+  color: rgb(18, 23, 21);
+} */
+
+.weather-card {
+  background: rgb(176, 228, 228);
+  border-radius: 15px;
+}
+
+.dark .weather-card {
+  background: #6b7280;
+}
+
+.weather-chart {
+  background: whitesmoke;
+}
+
+.dark .weather-chart {
+  background: #1f2937;
+}
+
+/* Theme Button */
+
+.theme-button {
+  background: #64748b;
+  cursor: pointer;
+}
+
+.dark .theme-button {
+  background: rgb(28, 30, 30);
+}
 
 /* Loading States */
 .loading-shimmer {
@@ -603,7 +673,6 @@ button,
 input,
 select,
 textarea,
-.travel-card,
 .country-detail-item {
   transition: all 0.3s ease;
 }

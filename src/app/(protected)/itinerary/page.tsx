@@ -251,21 +251,21 @@ export default function ItineraryPage() {
                         {/* Table Body */}
                         <div className="divide-y divide-gray-100">
                             {sortedTrips.map((trip) => (
-                                <div key={trip.id} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
+                                <div key={trip.id} className="table-body px-6 py-4 transition-colors duration-200 cursor-pointer">
                                     <div className="grid grid-cols-12 gap-4 items-center">
                                         <div className="col-span-3">
                                             <div className="flex items-center">
                                                 <div className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-lg flex items-center justify-center mr-3">
                                                     <MapPin className="w-4 h-4 text-white" />
                                                 </div>
-                                                <span className="font-semibold text-gray-800">{trip.location}</span>
+                                                <span className="font-semibold table-text">{trip.location}</span>
                                             </div>
                                         </div>
                                         <div className="col-span-2">
-                                            <span className="text-gray-700">{new Date(trip.startDate).toLocaleDateString()}</span>
+                                            <span className="table-text">{new Date(trip.startDate).toLocaleDateString()}</span>
                                         </div>
                                         <div className="col-span-2">
-                                            <span className="text-gray-700">{new Date(trip.endDate).toLocaleDateString()}</span>
+                                            <span className="table-text">{new Date(trip.endDate).toLocaleDateString()}</span>
                                         </div>
                                         <div className="col-span-3">
                                             {trip.weatherSummary ? (

@@ -33,9 +33,9 @@ export default function ThemeToggle() {
         <button
             onClick={onToggle}
             aria-label="Toggle theme"
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-200/70 dark:bg-gray-800/70 hover:bg-gray-300/70 dark:hover:bg-gray-700/70 transition text-sm cursor-pointer"
+            className="theme-button px-3 py-2 rounded-xl transition text-sm"
         >
-            {resolvedTheme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {resolvedTheme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
             {/* <span>{resolvedTheme === 'dark' ? 'Light' : 'Dark'}</span> */}
         </button>
     );

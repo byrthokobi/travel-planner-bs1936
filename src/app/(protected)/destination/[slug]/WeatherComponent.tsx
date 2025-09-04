@@ -34,7 +34,7 @@ export default function WeatherChart({ forecast }: { forecast: any }) {
     const avgTemp = Math.round(data.reduce((sum: number, item: TempData) => sum + (item.max + item.min) / 2, 0) / data.length);
 
     return (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <div className="weather-chart rounded-2xl shadow-lg border border-gray-200 p-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
@@ -42,13 +42,13 @@ export default function WeatherChart({ forecast }: { forecast: any }) {
                         <Thermometer className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-800">Weather Forecast</h3>
-                        <p className="text-gray-500 text-sm">Temperature outlook</p>
+                        <h3 className="text-lg font-semibold">Weather Forecast</h3>
+                        <h5 className=" text-sm">Temperature outlook</h5>
                     </div>
                 </div>
                 <div className="text-right">
-                    <div className="text-2xl font-bold text-gray-800">{avgTemp}°C</div>
-                    <div className="text-gray-500 text-sm">average</div>
+                    <h4 className="text-2xl">{avgTemp}°C</h4>
+                    <h5 className="text-sm">average</h5>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@ export default function WeatherChart({ forecast }: { forecast: any }) {
                             <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.05} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#707275ff" />
                     <XAxis
                         dataKey="date"
                         axisLine={false}

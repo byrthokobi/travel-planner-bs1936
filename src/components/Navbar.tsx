@@ -36,9 +36,9 @@ export const Navbar: React.FC = () => {
                                     {/* <p className="text-white/70 text-xs hidden sm:block">Explore the world</p> */}
                                 </div>
                             </Link>
+                            <ThemeToggle />
                         </div>
 
-                        <ThemeToggle />
 
                         {/* Desktop Navigation */}
                         <div className="hidden md:flex items-center space-x-1">

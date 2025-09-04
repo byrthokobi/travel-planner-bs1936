@@ -89,21 +89,12 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
 
             <Modal open={open} onClose={() => setOpen(false)}>
                 <Box
-                    sx={{
-                        position: "absolute",
-                        bottom: "10%",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        bgcolor: "background.paper",
-                        boxShadow: 24,
-                        p: 4,
-                        borderRadius: 2,
-                        width: 300,
-                    }}
+                    className="modal-body"
                 >
-                    <Typography variant="h6" mb={2}>
+                    <h5 className="modal-text mb-4">
                         Select Trip Dates
-                    </Typography>
+                    </h5>
+
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Start Date"

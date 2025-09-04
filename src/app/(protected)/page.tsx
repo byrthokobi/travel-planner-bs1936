@@ -1,10 +1,9 @@
 'use client'
 
-import { auth } from "@/lib/auth";
 import { Button, Container, Typography, Box, TextField, CircularProgress, List, ListItem, ListItemText, ListItemButton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { signOut, useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Country {
@@ -15,7 +14,7 @@ interface Country {
 }
 
 
-const fetchCities = async (query: string): Promise<(Country[])> => {
+const fetchCountries = async (query: string): Promise<(Country[])> => {
     if (!query) return [];
     const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
     const data = await res.json();
@@ -30,15 +29,36 @@ const fetchCities = async (query: string): Promise<(Country[])> => {
 const DashboardPage = () => {
     const router = useRouter();
     const { data: session, status } = useSession();
-    const [query, setQuery] = useState('');
+    const searchParams = useSearchParams();
+    const initialQuery = searchParams.get('q') || '';
+    const [query, setQuery] = useState(initialQuery);
     const [loading, setLoading] = useState(false);
     const [navigating, setNavigating] = useState(false);
 
+
     const { data: results = [], isFetching, isError } = useQuery({
-        queryKey: ["countries", query],
-        queryFn: () => fetchCities(query),
-        enabled: query.length > 0,
+        queryKey: ["countries", initialQuery],
+        queryFn: () => fetchCountries(initialQuery),
+        enabled: initialQuery.length > 0,
     });
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            const currentQ = searchParams.get("q") || "";
+
+            if (query !== currentQ) {
+                if (query.trim() === "") {
+                    router.push("/");
+                } else {
+                    router.push(`?q=${query}`);
+                }
+            }
+        }, 500);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [query, router, searchParams]);
 
     if (status === "loading") {
         return <CircularProgress />;
@@ -62,16 +82,17 @@ const DashboardPage = () => {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         fullWidth
+                    // className="input-field"
                     />
                 </Box>
 
                 {isFetching && <CircularProgress sx={{ marginTop: "20px" }} />}
-                {isError && <Typography color="error">Failed to fetch cities.</Typography>}
+                {isError && <Typography color="error">Failed to fetch countries.</Typography>}
 
                 <List className="country-list" sx={{
                     display: query.length > 0 ? 'block' : 'none',
                     filter: navigating ? "blur(4px)" : "none",
-                    "pointer-events": navigating ? "none" : "auto",
+                    pointerEvents: navigating ? "none" : "auto",
                 }}>
                     {results.map((country: Country, idx) => (
                         <ListItemButton
