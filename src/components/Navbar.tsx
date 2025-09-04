@@ -97,7 +97,6 @@ export const Navbar: React.FC = () => {
 
             {/* Mobile Navigation with slide-in effect */}
             {isMenuOpen && <div className="md:hidden fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out translate-x-0">
-                {/* Backdrop with click to close */}
                 <div
                     className="absolute inset-0 bg-black transition-opacity duration-300 bg-opacity-50"
                     onClick={closeMenu}

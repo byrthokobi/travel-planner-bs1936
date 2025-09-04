@@ -135,6 +135,28 @@ h3 {
   color: white;
 }
 
+.dark .login-form {
+  background: #39445c;
+}
+
+.dark ::placeholder {
+  color: white;
+}
+
+.country-list {
+  max-height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-radius: 2px;
+  padding: 10px;
+  background-color: whitesmoke;
+  transition: filter 0.2s ease-in-out;
+}
+
+.dark .country-list {
+  background-color: #374151;
+}
+
 /* Card Styles */
 .travel-card {
   background: white;
@@ -209,7 +231,7 @@ h3 {
 
 .dark .travel-input {
   background: #374151;
-  border-color: #4b5563;
+  border-color: #f6f7f9;
   color: #f9fafb;
 }
 

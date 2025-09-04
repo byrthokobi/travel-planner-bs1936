@@ -12,8 +12,7 @@ export default function ThemeToggle() {
     const next = (resolvedTheme === 'dark') ? 'light' : 'dark';
 
     async function onToggle() {
-        setTheme(next); // next-themes handles class switching
-        // also set cookie for SSR
+        setTheme(next);
         try {
             const expires = new Date();
             expires.setFullYear(expires.getFullYear() + 1);

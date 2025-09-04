@@ -68,17 +68,10 @@ const DashboardPage = () => {
                 {isFetching && <CircularProgress sx={{ marginTop: "20px" }} />}
                 {isError && <Typography color="error">Failed to fetch cities.</Typography>}
 
-                <List sx={{
-                    maxHeight: "400px",
-                    overflowX: "hidden",
-                    overflowY: "auto",
-                    borderRadius: "2",
-                    p: "1",
-                    backgroundColor: "whitesmoke",
+                <List className="country-list" sx={{
                     display: query.length > 0 ? 'block' : 'none',
                     filter: navigating ? "blur(4px)" : "none",
-                    pointerEvents: navigating ? "none" : "auto",
-                    transition: "filter 0.2s ease-in-out"
+                    "pointer-events": navigating ? "none" : "auto",
                 }}>
                     {results.map((country: Country, idx) => (
                         <ListItemButton
@@ -105,7 +98,7 @@ const DashboardPage = () => {
                     ))}
                 </List>
             </Box>
-        </Container>
+        </Container >
     );
 };
 export default DashboardPage;

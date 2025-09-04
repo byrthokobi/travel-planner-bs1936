@@ -69,7 +69,7 @@ const LoginPage = () => {
 
             <div className="relative w-full max-w-md">
                 {/* Glassmorphism Card */}
-                <div className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300 hover:scale-105">
+                <div className="login-form backdrop-blur-lg bg-white/20 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300">
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4 shadow-lg">
