@@ -20,7 +20,7 @@ export const Navbar: React.FC = () => {
     };
 
     return (
-        <nav className="relative">
+        <nav className="relative z-50">
             {/* Glassmorphism navbar */}
             <div className="backdrop-blur-lg bg-white/10 border-b border-white/20 shadow-lg">
                 <div className="container-travel">
@@ -66,7 +66,6 @@ export const Navbar: React.FC = () => {
                             { }
                         </div>
 
-                        {/* CTA Button */}
                         <div className="hidden md:flex items-center gap-2.5">
                             {status === 'authenticated' && (
                                 <button
@@ -97,10 +96,10 @@ export const Navbar: React.FC = () => {
             </div>
 
             {/* Mobile Navigation with slide-in effect */}
-            <div className={`md:hidden fixed inset-0 z-50 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            {isMenuOpen && <div className="md:hidden fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out translate-x-0">
                 {/* Backdrop with click to close */}
                 <div
-                    className={`absolute inset-0 bg-black transition-opacity duration-300 ${isMenuOpen ? 'bg-opacity-50' : 'bg-opacity-0 pointer-events-none'}`}
+                    className="absolute inset-0 bg-black transition-opacity duration-300 bg-opacity-50"
                     onClick={closeMenu}
                 />
 
@@ -150,7 +149,7 @@ export const Navbar: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
         </nav>
     );
 }

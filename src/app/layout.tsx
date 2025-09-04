@@ -6,6 +6,8 @@ import Providers from "./providers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { cookies } from "next/headers";
+import { Navbar } from "@/components/Navbar";
+import ClientLayout from "./ClientLayout";
 
 
 const geistSans = Geist({
@@ -39,10 +41,10 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div>
-          <Providers>
+          <ClientLayout>
             {children}
-          </Providers>
-          <ToastContainer position="top-right" autoClose={2000} />
+          </ClientLayout>
+
         </div>
       </body>
     </html>

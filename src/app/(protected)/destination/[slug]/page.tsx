@@ -6,18 +6,23 @@ import { redirect } from "next/navigation";
 import { Clock, Flag, MapPin, Users } from "lucide-react";
 
 async function getCountryData(countryName: string) {
-    const res = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
-    const data = await res.json();
-    console.log(data);
-    const country = data[0];
-    return {
-        name: country.name.common,
-        capital: country.capital,
-        population: country.population,
-        timezone: country.timezones?.[0] || "N/A",
-        flag: country.flags?.png || "",
-        lat: country.latlng?.[0],
-        lon: country.latlng?.[1]
+    try {
+        const res = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+        const data = await res.json();
+        console.log(data);
+        const country = data[0];
+        return {
+            name: country.name.common,
+            capital: country.capital,
+            population: country.population,
+            timezone: country.timezones?.[0] || "N/A",
+            flag: country.flags?.png || "",
+            lat: country.latlng?.[0],
+            lon: country.latlng?.[1]
+        }
+    } catch (err) {
+        console.error(err);
+        return null;
     }
 }
 
@@ -42,8 +47,8 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
 
     let weatherData: any = null;
     let currentTemperature = 0;
-    if (country.lat && country.lon) {
-        weatherData = await getWeather(country.lat, country.lon);
+    if (country?.lat && country?.lon) {
+        weatherData = await getWeather(country?.lat, country?.lon);
         if (weatherData && weatherData.current_weather) {
             currentTemperature = weatherData.current_weather.temperature;
         }
@@ -73,7 +78,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-gray-600 mb-1">Country Name</p>
-                                <p className="text-lg font-semibold text-gray-800">{country.name}</p>
+                                <p className="text-lg font-semibold text-gray-800">{country?.name}</p>
                             </div>
                         </div>
 
@@ -84,7 +89,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-gray-600 mb-1">Population</p>
-                                <p className="text-lg font-semibold text-gray-800">{country.population.toLocaleString()}</p>
+                                <p className="text-lg font-semibold text-gray-800">{country?.population.toLocaleString()}</p>
                             </div>
                         </div>
 
@@ -95,20 +100,20 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-gray-600 mb-1">Timezone</p>
-                                <p className="text-lg font-semibold text-gray-800">{country.timezone}</p>
+                                <p className="text-lg font-semibold text-gray-800">{country?.timezone}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Flag Section */}
                     <div className="flex flex-col items-center justify-center">
-                        {country.flag ? (
+                        {country?.flag ? (
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
                                 <div className="relative bg-white p-4 rounded-2xl shadow-lg border-2 border-gray-100 group-hover:border-gray-200 transition-colors duration-300">
                                     <img
-                                        src={country.flag}
-                                        alt={`${country.name} flag`}
+                                        src={country?.flag}
+                                        alt={`${country?.name} flag`}
                                         className="w-24 h-16 sm:w-32 sm:h-20 object-cover rounded-lg shadow-sm"
                                     />
                                 </div>
@@ -128,18 +133,18 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                 <div className="mt-6 pt-6 border-t border-gray-100">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                         <div className="p-3 bg-blue-50 rounded-xl">
-                            <p className="text-2xl font-bold text-blue-600">{country.capital}</p>
+                            <p className="text-2xl font-bold text-blue-600">{country?.capital}</p>
                             <p className="text-xs text-blue-600 font-medium uppercase tracking-wide">Capital City</p>
                         </div>
                         <div className="p-3 bg-green-50 rounded-xl">
                             <p className="text-2xl font-bold text-green-600">
-                                {(country.population / 1000000).toFixed(1)}M
+                                {(country?.population / 1000000).toFixed(1)}M
                             </p>
                             <p className="text-xs text-green-600 font-medium uppercase tracking-wide">Population (M)</p>
                         </div>
                         <div className="p-3 bg-purple-50 rounded-xl">
                             <p className="text-2xl font-bold text-purple-600">
-                                {country.timezone.split('/').length > 1 ? country.timezone.split('/')[1] : country.timezone}
+                                {country?.timezone.split('/').length > 1 ? country?.timezone.split('/')[1] : country?.timezone}
                             </p>
                             <p className="text-xs text-purple-600 font-medium uppercase tracking-wide">Time Zone</p>
                         </div>

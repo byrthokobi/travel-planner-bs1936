@@ -15,7 +15,6 @@ export default function Providers({ children }: { children: ReactNode }) {
             <NextThemesProvider attribute="class" enableSystem>
                 <ThemeSync />
                 <QueryClientProvider client={queryClient}>
-                    <Navbar />
                     {children}
                 </QueryClientProvider>
             </NextThemesProvider>
