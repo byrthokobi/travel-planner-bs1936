@@ -298,7 +298,7 @@ export default function ItineraryPage() {
                         {/* Mobile Sort Controls */}
                         <div className="travel-card p-4">
                             <div className="flex flex-wrap gap-2">
-                                <span className="text-sm font-medium text-gray-600 mr-2">Sort by:</span>
+                                <span className="text-sm font-medium mr-2">Sort by:</span>
                                 <button
                                     onClick={() => toggleSort("location")}
                                     className={`flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200 ${sortConfig.key === "location"
@@ -335,10 +335,10 @@ export default function ItineraryPage() {
                                             <MapPin className="w-5 h-5 text-white" />
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <h3 className="font-bold text-gray-800 text-lg truncate">{trip.location}</h3>
-                                            <p className="text-sm text-gray-600">
+                                            <h3 className="font-bold text-lg truncate">{trip.location}</h3>
+                                            <h6 className="text-sm">
                                                 {new Date(trip.startDate).toLocaleDateString()} - {new Date(trip.endDate).toLocaleDateString()}
-                                            </p>
+                                            </h6>
                                         </div>
                                     </div>
                                     <button

@@ -42,47 +42,61 @@ export const Navbar: React.FC = () => {
 
                         {/* Desktop Navigation */}
                         <div className="hidden md:flex items-center space-x-1">
-                            <Link
-                                href="/"
-                                className="flex items-center px-4 py-2 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
-                            >
-                                <Home className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
-                                Home
-                            </Link>
-                            <Link
-                                href="/itinerary"
-                                className="flex items-center px-4 py-2 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
-                            >
-                                <MapPin className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
-                                Itinerary
-                            </Link>
-                            <Link
-                                href="/contact"
-                                className="flex items-center px-4 py-2 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
-                            >
-                                <Mail className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
-                                Contact
-                            </Link>
-                            { }
+                            {status == "authenticated" && (
+                                <>
+                                    <Link
+                                        href="/"
+                                        className="flex items-center px-4 py-2 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
+                                    >
+                                        <Home className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
+                                        Home
+                                    </Link>
+                                    <Link
+                                        href="/itinerary"
+                                        className="flex items-center px-4 py-2 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
+                                    >
+                                        <MapPin className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
+                                        Itinerary
+                                    </Link>
+                                    <Link
+                                        href="/contact"
+                                        className="flex items-center px-4 py-2 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
+                                    >
+                                        <Mail className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" />
+                                        Contact
+                                    </Link>
+                                </>
+                            )
+                            }
                         </div>
 
                         <div className="hidden md:flex items-center gap-2.5">
-                            {status === 'authenticated' && (
-                                <button
-                                    onClick={() => handleSignOut()}
-                                    className="btn-secondary flex items-center space-x-2 text-sm"
-                                >
-                                    <span>Logout</span>
-                                    <LogOut className="w-4 h-4" />
-                                </button>
+                            {status === 'authenticated' ? (
+                                <>
+                                    <button
+                                        onClick={() => handleSignOut()}
+                                        className="btn-secondary flex items-center space-x-2 text-sm"
+                                    >
+                                        <span>Logout</span>
+                                        <LogOut className="w-4 h-4" />
+                                    </button>
+                                    <Link href="/profile">
+                                        <button className="btn-primary flex items-center space-x-2 text-sm">
+                                            <span>Profile</span>
+                                            <User className="w-4 h-4" />
+                                        </button>
+                                    </Link>
+                                </>
+                            ) : (
+                                <Link href="/login">
+                                    <button className="btn-primary flex items-center space-x-2 text-sm">
+                                        <span>Login</span>
+                                        <User className="w-4 h-4" />
+                                    </button>
+                                </Link>
                             )}
-                            <Link href="/profile">
-                                <button className="btn-primary flex items-center space-x-2 text-sm">
-                                    <span>Profile</span>
-                                    <User className="w-4 h-4" />
-                                </button>
-                            </Link>
                         </div>
+
 
                         {/* Mobile menu button */}
                         <button
@@ -105,46 +119,59 @@ export const Navbar: React.FC = () => {
                 {/* Menu content */}
                 <div className="relative h-full w-3/4 max-w-xs backdrop-blur-lg bg-white/10 border-r border-white/20 shadow-xl">
                     <div className="flex flex-col h-full pt-20 px-6 space-y-6">
-                        <Link
-                            href="/"
-                            className="flex items-center px-4 py-3 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300"
-                            onClick={closeMenu}
-                        >
-                            <Home className="w-5 h-5 mr-3" />
-                            Home
-                        </Link>
-                        <Link
-                            href="/itinerary"
-                            className="flex items-center px-4 py-3 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300"
-                            onClick={closeMenu}
-                        >
-                            <MapPin className="w-5 h-5 mr-3" />
-                            Itinerary
-                        </Link>
-                        <Link
-                            href="/contact"
-                            className="flex items-center px-4 py-3 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300"
-                            onClick={closeMenu}
-                        >
-                            <Mail className="w-5 h-5 mr-3" />
-                            Contact
-                        </Link>
-                        <div className="pt-4 mt-auto mb-8" style={{ display: "flex", gap: "10px" }}>
-                            {status === 'authenticated' && (
-                                <button
-                                    onClick={() => handleSignOut()}
-                                    className="btn-secondary flex items-center space-x-2 text-sm"
+                        {status === "authenticated" && (
+                            <>
+                                <Link
+                                    href="/"
+                                    className="flex items-center px-4 py-3 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300"
+                                    onClick={closeMenu}
                                 >
-                                    <span>Logout</span>
-                                    <LogOut className="w-4 h-4" />
-                                </button>
-                            )}
-                            <Link href="/profile" onClick={closeMenu}>
-                                <button className="btn-primary w-full flex items-center justify-center space-x-2 py-3">
-                                    <span>Profile</span>
-                                    <User className="w-5 h-5" />
-                                </button>
-                            </Link>
+                                    <Home className="w-5 h-5 mr-3" />
+                                    Home
+                                </Link>
+                                <Link
+                                    href="/itinerary"
+                                    className="flex items-center px-4 py-3 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300"
+                                    onClick={closeMenu}
+                                >
+                                    <MapPin className="w-5 h-5 mr-3" />
+                                    Itinerary
+                                </Link>
+                                <Link
+                                    href="/contact"
+                                    className="flex items-center px-4 py-3 rounded-xl text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300"
+                                    onClick={closeMenu}
+                                >
+                                    <Mail className="w-5 h-5 mr-3" />
+                                    Contact
+                                </Link>
+                            </>
+                        )}
+                        <div className="pt-4 mt-auto mb-8" style={{ display: "flex", gap: "10px" }}>
+                            {status === 'authenticated' ? (
+                                <>
+                                    <button
+                                        onClick={() => handleSignOut()}
+                                        className="btn-secondary flex items-center space-x-2 text-sm"
+                                    >
+                                        <span>Logout</span>
+                                        <LogOut className="w-4 h-4" />
+                                    </button>
+                                    <Link href="/profile" onClick={closeMenu}>
+                                        <button className="btn-primary w-full flex items-center justify-center space-x-2 py-3">
+                                            <span>Profile</span>
+                                            <User className="w-5 h-5" />
+                                        </button>
+                                    </Link>
+                                </>
+                            ) :
+                                <Link href="/login" onClick={closeMenu}>
+                                    <button className="btn-primary w-full flex items-center justify-center space-x-2 py-3">
+                                        <span>Login</span>
+                                        <User className="w-5 h-5" />
+                                    </button>
+                                </Link>
+                            }
                         </div>
                     </div>
                 </div>
