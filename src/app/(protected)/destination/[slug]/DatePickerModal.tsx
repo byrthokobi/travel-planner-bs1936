@@ -4,7 +4,6 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { DatePicker, DateRange, DateRangePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { Dayjs } from "dayjs";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -22,18 +21,6 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
     const [saving, setSaving] = useState(false);
     const router = useRouter();
 
-    // const fetchWeather = async () => {
-    //     try {
-    //         const res = await fetch(
-    //             `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`
-    //         );
-    //         const data = await res.json();
-    //         return data?.current_weather?.temperature ?? "N/A";
-    //     } catch (err) {
-    //         console.error("Failed to fetch weather:", err);
-    //         return "N/A";
-    //     }
-    // };
     const handleSave = async () => {
         if (!startDate || !endDate) {
             toast.error("Please select both Start and End Dates");
@@ -70,8 +57,6 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
             setOpen(false);
             setStartDate(null);
             setEndDate(null);
-
-            // Use router.push instead of redirect for client-side navigation
             router.push("/");
         } catch (error) {
             console.error("Error saving trip:", error);
