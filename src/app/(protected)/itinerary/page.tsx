@@ -173,9 +173,9 @@ export default function ItineraryPage() {
     };
 
     return (
-        <div className="container-travel section-padding">
+        <div className="container-travel">
             {/* Header */}
-            <div className="travel-card p-4 md:p-6 mb-8">
+            <div className="travel-card p-4 md:p-6 mb-8 mt-3">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
                     <div className="flex items-center">
                         <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-3 md:mr-4 shadow-lg">

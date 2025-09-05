@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 interface Country {
     name: string;
-    officitalName: string;
+    officialName: string;
     capital: string;
     region: string;
     flag: string;
@@ -26,7 +26,7 @@ const fetchCountries = async (query: string): Promise<(Country[])> => {
 
         const countries = data.map((country: any) => ({
             name: country.name.common,
-            officitalName: country.name.official,
+            officialName: country.name.official,
             capital: country.capital ? country.capital[0] : "N/A",
             region: country.region,
             flag: country.flags?.png || "",
@@ -56,7 +56,7 @@ const DashboardPage = () => {
     const initialQuery = searchParams.get('q') || '';
     const [query, setQuery] = useState(initialQuery);
     const [loading, setLoading] = useState(false);
-    const [navigating, setNavigating] = useState(false);
+    const [isNavigating, setIsNavigating] = useState(false);
 
 
     const { data: results = [], isFetching, isError } = useQuery({
@@ -128,8 +128,8 @@ const DashboardPage = () => {
 
                 <List className="country-list" sx={{
                     display: query.length > 0 ? 'block' : 'none',
-                    filter: navigating ? "blur(4px)" : "none",
-                    pointerEvents: navigating ? "none" : "auto",
+                    filter: isNavigating ? "blur(4px)" : "none",
+                    pointerEvents: isNavigating ? "none" : "auto",
                 }}>
                     {
                         isFetching ? (
@@ -141,7 +141,7 @@ const DashboardPage = () => {
                                 <ListItemButton
                                     key={idx}
                                     onClick={() => {
-                                        setNavigating(true);
+                                        setIsNavigating(true);
                                         router.push(`/destination/${country.name}`)
                                     }
                                     }
@@ -151,7 +151,7 @@ const DashboardPage = () => {
                                         <h5>{country?.name}</h5>
                                         <p>{`Capital: ${country?.capital},
                                 Region: ${country.region}, 
-                                Official Name: ${country?.officitalName}`}</p>
+                                Official Name: ${country?.officialName}`}</p>
                                     </div>
                                     {country.flag && (
                                         <img
