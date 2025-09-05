@@ -125,39 +125,46 @@ const DashboardPage = () => {
                     />
                 </Box>
 
-                {isFetching && <CircularProgress sx={{ marginTop: "20px" }} />}
-                {isError && <Typography color="error">Failed to fetch countries.</Typography>}
 
                 <List className="country-list" sx={{
                     display: query.length > 0 ? 'block' : 'none',
                     filter: navigating ? "blur(4px)" : "none",
                     pointerEvents: navigating ? "none" : "auto",
                 }}>
-                    {results && results.length > 0 ? (results.map((country: Country, idx) => (
-                        <ListItemButton
-                            key={idx}
-                            onClick={() => {
-                                setNavigating(true);
-                                router.push(`/destination/${country.name}`)
-                            }
-                            }
-                            className="country-list-item"
-                        >
-                            <div>
-                                <h5>{country?.name}</h5>
-                                <p>{`Capital: ${country?.capital},
+                    {
+                        isFetching ? (
+                            <CircularProgress sx={{ marginTop: "20px" }} />
+                        ) : isError ? (
+                            <Typography color="error">Failed to fetch countries.</Typography>
+                        ) : results.length > 0 ? (
+                            results.map((country: Country, idx) => (
+                                <ListItemButton
+                                    key={idx}
+                                    onClick={() => {
+                                        setNavigating(true);
+                                        router.push(`/destination/${country.name}`)
+                                    }
+                                    }
+                                    className="country-list-item"
+                                >
+                                    <div>
+                                        <h5>{country?.name}</h5>
+                                        <p>{`Capital: ${country?.capital},
                                 Region: ${country.region}, 
                                 Official Name: ${country?.officitalName}`}</p>
-                            </div>
-                            {country.flag && (
-                                <img
-                                    src={country.flag}
-                                    alt={country.name}
-                                    style={{ width: "30px", marginLeft: "10px" }}
-                                />
-                            )}
-                        </ListItemButton>
-                    ))) : <p className="text-bold text-red-500">"Country Not Found"</p>}
+                                    </div>
+                                    {country.flag && (
+                                        <img
+                                            src={country.flag}
+                                            alt={country.name}
+                                            style={{ width: "30px", marginLeft: "10px" }}
+                                        />
+                                    )}
+                                </ListItemButton>
+                            ))
+                        ) : query.length > 0 && !isFetching ? (
+                            <p className="text-bold text-red-500">"Country Not Found"</p>
+                        ) : null}
                 </List>
             </Box>
         </Container >

@@ -191,6 +191,10 @@ h3 {
   background: rgb(42, 47, 77);
 }
 
+.dark .delete-modal h3 {
+  color: black;
+}
+
 .dark .country-list-item-text {
   color: white !important;
 }
