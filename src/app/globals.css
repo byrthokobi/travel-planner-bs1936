@@ -178,6 +178,22 @@ h3 {
   background-color: #374151;
 }
 
+.country-list-item:hover {
+  background: gray;
+}
+
+.country-list-item {
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.dark .country-list-item:hover {
+  background: rgb(42, 47, 77);
+}
+
+.dark .country-list-item-text {
+  color: white !important;
+}
 /* Table Design */
 .table-body:hover {
   background-color: #cbd5e1;
@@ -238,7 +254,7 @@ h3 {
 
 /* Input Styles */
 .travel-input {
-  width: 75%;
+  width: 100%;
   padding: 1rem;
   border: 2px solid #e2e8f0;
   border-radius: 1rem;
@@ -246,6 +262,23 @@ h3 {
   transition: all 0.3s ease;
   background: white;
   color: #1e293b;
+}
+
+.destination-search-box {
+  width: 75%;
+  padding: 1rem;
+  background: aliceblue;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  border: 2px solid #487dd8;
+}
+
+.dark .destination-search-box {
+  padding: 1rem;
+  background: rgb(80, 91, 101);
+  transition: all 0.3s ease;
+  color: white;
+  border: 2px solid whitesmoke;
 }
 
 .travel-input:focus {

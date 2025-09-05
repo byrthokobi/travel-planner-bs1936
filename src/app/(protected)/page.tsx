@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 interface Country {
     name: string;
+    officitalName: string;
     capital: string;
     region: string;
     flag: string;
@@ -16,14 +17,36 @@ interface Country {
 
 const fetchCountries = async (query: string): Promise<(Country[])> => {
     if (!query) return [];
-    const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
-    const data = await res.json();
-    return data.map((country: any) => ({
-        name: country.name.common,
-        capital: country.capital ? country.capital[0] : "N/A",
-        region: country.region,
-        flag: country.flags?.png || "",
-    }));
+    try {
+        const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
+
+        if (!res.ok) return [];
+        const data = await res.json();
+        if (!Array.isArray(data)) return [];
+
+        const countries = data.map((country: any) => ({
+            name: country.name.common,
+            officitalName: country.name.official,
+            capital: country.capital ? country.capital[0] : "N/A",
+            region: country.region,
+            flag: country.flags?.png || "",
+        }));
+
+        return countries.sort((a, b) => {
+            const q = query.toLowerCase();
+
+            const aStarts = a.name.toLowerCase().startsWith(q);
+            const bStarts = b.name.toLowerCase().startsWith(q);
+
+            if (aStarts && !bStarts) return -1;
+            if (!aStarts && bStarts) return 1;
+
+            return a.name.localeCompare(b.name);
+        });
+    } catch (error) {
+        console.error("Failed to Fetch Countries: " + error);
+        return [];
+    }
 }
 
 const DashboardPage = () => {
@@ -70,7 +93,7 @@ const DashboardPage = () => {
                 <h2 className="text-xl md:text-2xl lg:text-3xl">Plan Your Next Trip!</h2>
             </Box>
 
-            <Box className="travel-input" sx={{ margin: 'auto', marginTop: 5 }}>
+            <Box className="destination-search-box" sx={{ margin: 'auto', marginTop: 5 }}>
                 <Box sx={{
                     display: 'flex',
                     gap: '12px',
@@ -82,7 +105,23 @@ const DashboardPage = () => {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         fullWidth
-                    // className="input-field"
+                        sx={{
+                            "& .MuiInputLabel-root": {
+                                color: "black", // light mode
+                            },
+                            "& .MuiInputLabel-root.Mui-focused": {
+                                color: "blue", // focused state
+                            },
+                            ".dark & .MuiInputLabel-root": {
+                                color: "white", // dark mode
+                            },
+                            ".dark & .MuiInputLabel-root.Mui-focused": {
+                                color: "white", // focused in dark mode
+                            },
+                            ".dark & .MuiOutlinedInput-input": {
+                                color: "white", // dark mode text
+                            },
+                        }}
                     />
                 </Box>
 
@@ -94,7 +133,7 @@ const DashboardPage = () => {
                     filter: navigating ? "blur(4px)" : "none",
                     pointerEvents: navigating ? "none" : "auto",
                 }}>
-                    {results.map((country: Country, idx) => (
+                    {results && results.length > 0 ? (results.map((country: Country, idx) => (
                         <ListItemButton
                             key={idx}
                             onClick={() => {
@@ -102,12 +141,14 @@ const DashboardPage = () => {
                                 router.push(`/destination/${country.name}`)
                             }
                             }
-                            sx={{ cursor: "pointer" }}
+                            className="country-list-item"
                         >
-                            <ListItemText
-                                primary={country.name}
-                                secondary={`Capital: ${country.capital}, Region: ${country.region}`}
-                            />
+                            <div>
+                                <h5>{country?.name}</h5>
+                                <p>{`Capital: ${country?.capital},
+                                Region: ${country.region}, 
+                                Official Name: ${country?.officitalName}`}</p>
+                            </div>
                             {country.flag && (
                                 <img
                                     src={country.flag}
@@ -116,7 +157,7 @@ const DashboardPage = () => {
                                 />
                             )}
                         </ListItemButton>
-                    ))}
+                    ))) : <p className="text-bold text-red-500">"Country Not Found"</p>}
                 </List>
             </Box>
         </Container >

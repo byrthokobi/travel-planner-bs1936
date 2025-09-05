@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, Container, Grid, Typography } from "@mu
 import WeatherChart from "./WeatherComponent";
 import DatePickerModal from "./DatePickerModal";
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Clock, Flag, MapPin, Users } from "lucide-react";
 
 async function getCountryData(countryName: string) {
@@ -13,16 +13,16 @@ async function getCountryData(countryName: string) {
         const country = data[0];
         return {
             name: country?.name?.common,
-            capital: country.capital,
-            population: country.population,
-            timezone: country.timezones?.[0] || "N/A",
-            flag: country.flags?.png || "",
-            lat: country.latlng?.[0],
-            lon: country.latlng?.[1]
+            capital: country?.capital,
+            population: country?.population,
+            timezone: country?.timezones?.[0] || "N/A",
+            flag: country?.flags?.png || "",
+            lat: country?.latlng?.[0],
+            lon: country?.latlng?.[1]
         }
     } catch (err) {
         console.error(err);
-        redirect('/error');
+        notFound();
     }
 }
 
@@ -155,6 +155,8 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                     </div>
                 </div>
             </div>
+
+
             <DatePickerModal countryName={countryName} currentTemperature={weatherData?.current_weather?.temperature} userId={Number(userId)} />
 
             {/* Weather Section */}
