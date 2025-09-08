@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUp, MapPin, Plus, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Trip {
     id: number;
@@ -22,6 +23,32 @@ interface DeleteModalProps {
     onClose: () => void;
     onConfirm: () => void;
     tripLocation: string;
+}
+
+async function fetchTrips({ pageParam = 0 }): Promise<{ trips: Trip[]; hasMore: boolean }> {
+    try {
+        const res = await fetch(`/api/trips?offset=${pageParam}&limit=7`);
+        if (!res.ok) throw new Error("Failed to Load Trips");
+        return res.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+async function deleteTrip(id: number) {
+    try {
+        const res = await fetch("/api/trips", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id }),
+        });
+        if (!res.ok) throw new Error("Failed to delete trip");
+        return id;
+    } catch (error) {
+        console.log("Error Deleting the Trip " + error);
+        throw error;
+    }
 }
 
 function DeleteModal({ isOpen, onClose, onConfirm, tripLocation }: DeleteModalProps) {
@@ -87,8 +114,8 @@ function DeleteModal({ isOpen, onClose, onConfirm, tripLocation }: DeleteModalPr
 export default function ItineraryPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const queryClient = useQueryClient();
 
-    const [trips, setTrips] = useState<Trip[]>([]);
     const [sortConfig, setSortConfig] = useState<{ key: keyof Trip; direction: "asc" | "desc" }>({
         key: "startDate",
         direction: "asc",
@@ -100,19 +127,39 @@ export default function ItineraryPage() {
     });
 
 
-    useEffect(() => {
-        async function fetchTrips() {
-            try {
-                const res = await fetch(`/api/trips`);
-                if (!res.ok) throw new Error("Failed to Load Trips");
-                const data: Trip[] = await res.json();
-                setTrips(data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchTrips();
-    }, []);
+    const {
+        data,
+        isLoading,
+        isError,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
+        queryKey: ["trips"],
+        queryFn: fetchTrips,
+        initialPageParam: 0,
+        getNextPageParam: (lastPage, allPages) =>
+            lastPage.hasMore
+                ? allPages.flatMap((p) => p.trips).length // next offset
+                : undefined,
+    });
+
+    const trips: Trip[] = data?.pages.flatMap((p) => p.trips) ?? [];
+
+
+    const mutation = useMutation({
+        mutationFn: deleteTrip,
+        onSuccess: (id) => {
+            queryClient.setQueryData<Trip[]>(["trips"], (oldTrips) =>
+                oldTrips ? oldTrips.filter((t) => t.id !== id) : []
+            );
+            toast.success("The Trip is Successfully Deleted");
+            closeDeleteModal();
+        },
+        onError: () => {
+            toast.error("Something went wrong while deleting the trip.");
+        },
+    });
 
     const sortedTrips = [...trips].sort((a, b) => {
         const { key, direction } = sortConfig;
@@ -148,23 +195,16 @@ export default function ItineraryPage() {
     };
 
     const handleDeleteConfirm = async () => {
-        if (!deleteModal.tripId) return;
-
-        try {
-            const res = await fetch("/api/trips", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: deleteModal.tripId }),
-            });
-            if (!res.ok) throw new Error("Failed to delete trip");
-            setTrips((prev) => prev.filter((t) => t.id !== deleteModal.tripId));
-            toast.success("The Trip is Successfully Deleted");
-            closeDeleteModal();
-        } catch (err) {
-            console.error(err);
-            toast.error("Something went wrong while deleting the trip.");
-        }
+        if (deleteModal.tripId) mutation.mutate(deleteModal.tripId);
     };
+
+    if (isLoading) {
+        return <p className="p-6">Loading trips...</p>;
+    }
+
+    if (isError) {
+        return <p className="p-6 text-red-500">Failed to load trips</p>;
+    }
 
     return (
         <div className="container-travel">
@@ -206,7 +246,7 @@ export default function ItineraryPage() {
             ) : (
                 <>
                     {/* Desktop Table View */}
-                    <div className="travel-card overflow-hidden hidden md:block">
+                    <div className="travel-card overflow-hidden hidden md:block mb-3">
                         {/* Table Header */}
                         <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
                             <div className="grid grid-cols-12 gap-4 items-center font-semibold text-gray-700">
@@ -359,6 +399,18 @@ export default function ItineraryPage() {
                             </div>
                         ))}
                     </div>
+                    {/* Load More button */}
+                    {hasNextPage && (
+                        <div className="flex justify-center mt-6">
+                            <button
+                                onClick={() => fetchNextPage()}
+                                disabled={isFetchingNextPage}
+                                className="btn-primary"
+                            >
+                                {isFetchingNextPage ? "Loading..." : "Load More"}
+                            </button>
+                        </div>
+                    )}
                 </>
             )}
 

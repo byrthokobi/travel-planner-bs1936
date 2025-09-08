@@ -38,11 +38,25 @@ export async function GET(req: Request) {
     
     const userID = Number(session.user?.id);
     
+    const { searchParams } = new URL(req.url);
+    const offset = Number(searchParams.get("offset")) || 0;
+    const limit = Number(searchParams.get("limit")) || 7;
+
     const trips = await prisma.trip.findMany({
-      orderBy: {startDate: 'asc'},
-      where: {user_id: userID}
+      where: { user_id: userID },
+      orderBy: { startDate: "asc" },
+      skip: offset,
+      take: limit,
     });
-    return NextResponse.json(trips);
+
+    const totalCount = await prisma.trip.count({
+      where: { user_id: userID },
+    });
+
+    return NextResponse.json({
+      trips,
+      hasMore: offset + trips.length < totalCount,
+    });
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch trips" }, { status: 500 });
   }

@@ -146,7 +146,7 @@ export default function ProfileClient({ user: initialUser }: ProfileClientProps)
                                 </div>
                                 <div>
                                     <h2 className="text-lg sm:text-xl font-bold text-gray-800">Your Trips</h2>
-                                    <p className="text-gray-600 text-xs sm:text-sm">{user.trips.length} destinations explored</p>
+                                    <p className="text-xs sm:text-sm">{user.trips.length} destinations explored</p>
                                 </div>
                             </div>
                         </div>

@@ -123,9 +123,9 @@ const SignupPage = () => {
                 </div>
             </div>
 
-            <div className="relative w-1/3 login-form">
+            <div className="relative w-1/3">
                 {/* Glassmorphism Card */}
-                <div className="backdrop-blur-lg bg-sky/100 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300">
+                <div className="backdrop-blur-lg login-form bg-sky/100 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300">
                     {/* Header */}
                     <div className="text-center mb-8">
                         {/* <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4 shadow-lg">
@@ -174,7 +174,7 @@ const SignupPage = () => {
                                 placeholder="*Email Address"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                                 required
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -191,7 +191,7 @@ const SignupPage = () => {
                                 placeholder="*Full Name"
                                 value={fullname}
                                 onChange={(e) => setFullname(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                                 required
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -208,7 +208,7 @@ const SignupPage = () => {
                                 placeholder="*Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                                 required
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -220,7 +220,7 @@ const SignupPage = () => {
                             <select
                                 value={sex}
                                 onChange={(e) => setSex(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             >
                                 <option value="" disabled hidden>Select Sex</option>
                                 <option value="Male" className="bg-purple-500/80 text-white">Male</option>
@@ -238,7 +238,7 @@ const SignupPage = () => {
                                 placeholder="Country"
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-purple-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>

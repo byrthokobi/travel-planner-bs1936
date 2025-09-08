@@ -164,6 +164,14 @@ h3 {
   color: white;
 }
 
+.input-text {
+  color: black;
+}
+
+.dark .input-text {
+  color: white;
+}
+
 .country-list {
   max-height: 400px;
   overflow-x: hidden;

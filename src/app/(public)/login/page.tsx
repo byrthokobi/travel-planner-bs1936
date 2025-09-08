@@ -20,15 +20,17 @@ const LoginPage = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
         let newErrors: typeof errors = {};
         if (!email) newErrors.email = 'Please Enter Your Email';
         if (!password) newErrors.password = 'Please Enter Your Password'
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            newErrors.password = ('Please enter a valid email address.');
+            newErrors.email = ('Please enter a valid email address.');
         }
 
-        setLoading(true);
+        setErrors(newErrors);
+
         const res = await signIn("credentials", {
             redirect: false,
             email,
@@ -81,12 +83,12 @@ const LoginPage = () => {
                                 placeholder="Email Address"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-blue-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            {error && <p className="text-red-700 text-sm text-center mt-2">{errors.email}</p>}
+                            {errors.email && <p className="text-red-700 font-bold text-sm text-center mt-2">{errors.email}</p>}
                         </div>
 
 
@@ -96,12 +98,12 @@ const LoginPage = () => {
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-pink-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            {error && <p className="text-red-700 text-sm text-center mt-2">{errors.password}</p>}
+                            {errors.password && <p className="text-red-700 font-bold text-sm text-center mt-2">{errors.password}</p>}
                         </div>
 
                         {/* Sign In Button */}
@@ -109,7 +111,11 @@ const LoginPage = () => {
                             type="submit"
                             onClick={handleLogin}
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-semibold py-4 rounded-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 active:scale-95 relative overflow-hidden group"
+                            className={`w-full text-white font-semibold py-4 rounded-2xl relative overflow-hidden group
+        ${loading
+                                    ? 'bg-gray-400 cursor-not-allowed shadow-none' // disabled style
+                                    : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:shadow-xl cursor-pointer'
+                                }`}
                         >
                             <span className="relative z-10 flex items-center justify-center">
                                 {loading ? 'Logging In...' : 'Login'}
