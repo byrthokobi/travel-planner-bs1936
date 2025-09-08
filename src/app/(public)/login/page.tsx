@@ -12,26 +12,20 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [errors, setErrors] = useState<{
+        email?: string
+        password?: string
+    }>({})
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        if (status === "authenticated") {
-            router.replace("/");
-        }
-    }, [status, router]);
-
-    if (status === "loading") return null;
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        let newErrors: typeof errors = {};
+        if (!email) newErrors.email = 'Please Enter Your Email';
+        if (!password) newErrors.password = 'Please Enter Your Password'
 
-        if (!email || !password) {
-            setError('Email and password are required.');
-            return;
-        }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError('Please enter a valid email address.');
-            return;
+            newErrors.password = ('Please enter a valid email address.');
         }
 
         setLoading(true);
@@ -92,7 +86,7 @@ const LoginPage = () => {
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-blue-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+                            {error && <p className="text-red-700 text-sm text-center mt-2">{errors.email}</p>}
                         </div>
 
 
@@ -107,7 +101,7 @@ const LoginPage = () => {
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-pink-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+                            {error && <p className="text-red-700 text-sm text-center mt-2">{errors.password}</p>}
                         </div>
 
                         {/* Sign In Button */}

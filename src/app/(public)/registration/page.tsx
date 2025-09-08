@@ -2,14 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { Plane, MapPin, Globe, User } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 const SignupPage = () => {
-
-    const { data: session, status } = useSession();
-    const router = useRouter();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,11 +20,6 @@ const SignupPage = () => {
         email?: string
         password?: string
     }>({})
-    // useEffect(() => {
-    //     if (status === "authenticated") {
-    //         router.replace("/");
-    //     }
-    // }, [status, router]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -103,6 +93,7 @@ const SignupPage = () => {
                 setErrors({ email: data.error || 'Something went wrong' });
             } else {
                 setSuccess('Account created successfully!');
+                toast.success('Your Account Has Been Created Successfully')
                 window.location.href = '/login'
             }
         } catch (error) {
@@ -112,6 +103,8 @@ const SignupPage = () => {
             setLoading(false);
         }
     };
+
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center p-4">
             {/* Background Pattern */}
