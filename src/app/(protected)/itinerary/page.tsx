@@ -99,15 +99,9 @@ export default function ItineraryPage() {
         tripLocation: "",
     });
 
-    // useEffect(() => {
-    //     if (status === 'unauthenticated') {
-    //         router.push("/login");
-    //     }
-    // }, [status, router]);
 
     useEffect(() => {
         async function fetchTrips() {
-            // if (status !== "authenticated" || !session?.user?.id) return;
             try {
                 const res = await fetch(`/api/trips`);
                 if (!res.ok) throw new Error("Failed to Load Trips");
@@ -118,7 +112,7 @@ export default function ItineraryPage() {
             }
         }
         fetchTrips();
-    }, [session, status]);
+    }, []);
 
     const sortedTrips = [...trips].sort((a, b) => {
         const { key, direction } = sortConfig;

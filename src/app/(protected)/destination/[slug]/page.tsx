@@ -2,48 +2,14 @@ import { Box, Button, Card, CardContent, Container, Grid, Typography } from "@mu
 import WeatherChart from "./WeatherComponent";
 import DatePickerModal from "./DatePickerModal";
 import { auth } from "@/lib/auth";
-import { notFound, redirect } from "next/navigation";
 import { Clock, Flag, MapPin, Users } from "lucide-react";
+import { getCountryData } from "@/services/countryService/CountryData"
+import { getWeather } from "@/services/countryService/CountryWeather";
 
-async function getCountryData(countryName: string) {
-    try {
-        const res = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
-        const data = await res.json();
-        console.log(data);
-        const country = data[0];
-        return {
-            name: country?.name?.common,
-            capital: country?.capital,
-            population: country?.population,
-            timezone: country?.timezones?.[0] || "N/A",
-            flag: country?.flags?.png || "",
-            lat: country?.latlng?.[0],
-            lon: country?.latlng?.[1]
-        }
-    } catch (err) {
-        console.error(err);
-        notFound();
-    }
-}
-
-async function getWeather(lat: number, lon: number) {
-    try {
-        const res = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`
-        );
-        return res.json();
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
 
 export default async function DestinationPage({ params }: { params: Promise<{ slug: string }> }) {
 
     const session = await auth();
-    // if (!session) {
-    //     redirect("/login");
-    // }
     const { slug } = await params;
     const countryName = decodeURIComponent(slug);
     const userId = session?.user?.id;
