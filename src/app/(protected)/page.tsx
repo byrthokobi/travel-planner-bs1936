@@ -51,15 +51,13 @@ const fetchCountries = async (query: string): Promise<(Country[])> => {
 
 const DashboardPage = () => {
     const router = useRouter();
-    const { data: session, status } = useSession();
     const searchParams = useSearchParams();
     const initialQuery = searchParams.get('q') || '';
     const [query, setQuery] = useState(initialQuery);
-    const [loading, setLoading] = useState(false);
     const [isNavigating, setIsNavigating] = useState(false);
 
 
-    const { data: results = [], isFetching, isError } = useQuery({
+    const { data: results = [], isFetching, isError, isLoading, error } = useQuery({
         queryKey: ["countries", initialQuery],
         queryFn: () => fetchCountries(initialQuery),
         enabled: initialQuery.length > 0,
@@ -83,10 +81,9 @@ const DashboardPage = () => {
         };
     }, [query, router, searchParams]);
 
-    if (status === "loading") {
-        return <CircularProgress />;
+    if (isLoading) {
+        <CircularProgress />
     }
-
     return (
         <Container>
             <Box sx={{ display: 'flex', justifyContent: 'space-around', marginTop: '2rem' }}>
@@ -163,7 +160,7 @@ const DashboardPage = () => {
                                 </ListItemButton>
                             ))
                         ) : query.length > 0 && !isFetching ? (
-                            <p className="text-bold text-red-500">"Country Not Found"</p>
+                            <p className="text-bold text-red-500">Country Not Found </p>
                         ) : null}
                 </List>
             </Box>

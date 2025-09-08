@@ -65,7 +65,9 @@ export async function GET(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const { id } = await req.json();
-    await prisma.trip.delete({ where: { id } });
+    console.log("DELETE API called with id:", id, "typeof:", typeof id);
+    const tripId = Number(id);
+    await prisma.trip.delete({ where: { id: tripId } });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete trip" }, { status: 500 });

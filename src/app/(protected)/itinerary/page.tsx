@@ -140,7 +140,7 @@ export default function ItineraryPage() {
         initialPageParam: 0,
         getNextPageParam: (lastPage, allPages) =>
             lastPage.hasMore
-                ? allPages.flatMap((p) => p.trips).length // next offset
+                ? allPages.flatMap((p) => p.trips).length
                 : undefined,
     });
 
@@ -150,9 +150,17 @@ export default function ItineraryPage() {
     const mutation = useMutation({
         mutationFn: deleteTrip,
         onSuccess: (id) => {
-            queryClient.setQueryData<Trip[]>(["trips"], (oldTrips) =>
-                oldTrips ? oldTrips.filter((t) => t.id !== id) : []
-            );
+            queryClient.setQueryData(["trips"], (data: any) => {
+                if (!data) return data;
+
+                const updatedPages = data.pages.map((page: any) => ({
+                    ...page,
+                    trips: page.trips.filter((trip: Trip) => trip.id !== id),
+                }));
+
+                return { ...data, pages: updatedPages };
+            });
+
             toast.success("The Trip is Successfully Deleted");
             closeDeleteModal();
         },
