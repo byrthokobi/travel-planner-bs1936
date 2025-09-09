@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp, MapPin, Plus, Trash2, X } from "lucide-react";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 
 interface Trip {
     id: number;
@@ -17,6 +19,7 @@ interface Trip {
     weatherSummary?: string;
     createdAt: string;
 }
+
 
 interface DeleteModalProps {
     isOpen: boolean;
@@ -319,7 +322,11 @@ export default function ItineraryPage() {
                                             )}
                                         </div>
                                         <div className="col-span-2 flex justify-center space-x-2">
-                                            <button className="btn-secondary text-sm px-3 py-1">
+                                            <button
+                                                className="btn-secondary text-sm px-3 py-1"
+                                                onClick={() => {
+                                                    router.push(`/trips/${trip.id}`)
+                                                }}>
                                                 View
                                             </button>
                                             <button
@@ -409,7 +416,7 @@ export default function ItineraryPage() {
                     </div>
                     {/* Load More button */}
                     {hasNextPage && (
-                        <div className="flex justify-center mt-6">
+                        <div className="flex justify-center p-3">
                             <button
                                 onClick={() => fetchNextPage()}
                                 disabled={isFetchingNextPage}
