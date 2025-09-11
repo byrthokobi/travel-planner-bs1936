@@ -228,7 +228,7 @@ export default function ItineraryPage() {
                         </div>
                         <div>
                             <h2 className="text-l md:text-xl font-bold text-gray-800 mb-1">Your Saved Trips</h2>
-                            <p className="text-sm md:text-base text-gray-600">Manage your travel adventures</p>
+                            <p className="text-sm md:text-base">Manage your travel adventures</p>
                         </div>
                     </div>
                     <Link href="/">

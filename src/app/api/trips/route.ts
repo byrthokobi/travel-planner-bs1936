@@ -61,7 +61,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Failed to fetch trips" }, { status: 500 });
   }
 }
-
 export async function DELETE(req: Request) {
   try {
     const { id } = await req.json();
