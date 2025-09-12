@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { signIn, useSession } from "next-auth/react";
 import { redirect, useRouter } from 'next/navigation';
 import { Globe, MapPin, Plane } from 'lucide-react';
+import Link from 'next/link';
 
 const LoginPage = () => {
     const { data: session, status } = useSession();
@@ -46,7 +47,7 @@ const LoginPage = () => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+        <div className="login-page min-h-screen flex items-center justify-center p-4">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-10 left-10 animate-bounce delay-1000">
@@ -65,7 +66,7 @@ const LoginPage = () => {
 
             <div className="relative w-full max-w-md">
                 {/* Glassmorphism Card */}
-                <div className="login-form backdrop-blur-lg bg-white/20 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300">
+                <div className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300">
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4 shadow-lg">
@@ -127,11 +128,11 @@ const LoginPage = () => {
 
                     {/* Footer */}
                     <div className="text-center mt-6">
-                        <p className="text-white/60 text-sm">
+                        <p className="text-sm">
                             Don't have an account?{' '}
-                            <a href="/registration" className="text-white font-medium hover:underline transition-all duration-300">
+                            <Link href="/registration" className="font-bold font-medium hover:underline transition-all duration-300">
                                 Register here
-                            </a>
+                            </Link>
                         </p>
                     </div>
                 </div>

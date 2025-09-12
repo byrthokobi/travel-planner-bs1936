@@ -148,7 +148,7 @@ export default function ItineraryPage() {
     });
 
     const trips: Trip[] = data?.pages.flatMap((p) => p.trips) ?? [];
-
+    //Todo - Invalid Query
 
     const mutation = useMutation({
         mutationFn: deleteTrip,

@@ -1,18 +1,7 @@
 import { auth } from '@/lib/auth'
-import { redirect } from 'next/navigation';
 import React from 'react'
-import { toast } from 'react-toastify';
 import { prisma } from '@/lib/prisma'
 import ProfileClient from './ProfileClient';
-
-interface User {
-    id: number;
-    fullname: string;
-    email: string;
-    sex?: string;
-    country?: string;
-    avatar?: string;
-}
 
 export default async function ProfilePage() {
     const session = await auth();
@@ -25,7 +14,7 @@ export default async function ProfilePage() {
     });
 
     if (!user) {
-        return <div>User not found.</div>;
+        return <div className="text-center">User not found.</div>;
     }
 
     return <ProfileClient user={user} />;

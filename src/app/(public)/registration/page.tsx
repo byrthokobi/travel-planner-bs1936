@@ -106,7 +106,7 @@ const SignupPage = () => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center p-4">
+        <div className="min-h-screen flex items-center justify-center p-4">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-10 left-10 animate-bounce delay-1000">
@@ -123,9 +123,9 @@ const SignupPage = () => {
                 </div>
             </div>
 
-            <div className="relative w-1/3">
+            <div className="relative w-3/7">
                 {/* Glassmorphism Card */}
-                <div className="backdrop-blur-lg login-form bg-sky/100 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300">
+                <div className="login-form backdrop-blur-lg bg-white/20 border border-white/30 rounded-3xl shadow-2xl p-8 transform transition-all duration-300">
                     {/* Header */}
                     <div className="text-center mb-8">
                         {/* <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4 shadow-lg">
@@ -174,7 +174,7 @@ const SignupPage = () => {
                                 placeholder="*Email Address"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-black rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                                 required
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -191,7 +191,7 @@ const SignupPage = () => {
                                 placeholder="*Full Name"
                                 value={fullname}
                                 onChange={(e) => setFullname(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-black rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                                 required
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -208,7 +208,7 @@ const SignupPage = () => {
                                 placeholder="*Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-black rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                                 required
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -220,7 +220,7 @@ const SignupPage = () => {
                             <select
                                 value={sex}
                                 onChange={(e) => setSex(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-black rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             >
                                 <option value="" disabled hidden>Select Sex</option>
                                 <option value="Male" className="bg-purple-500/80 text-white">Male</option>
@@ -238,7 +238,7 @@ const SignupPage = () => {
                                 placeholder="Country"
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
-                                className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
+                                className="w-full px-4 py-4 bg-white/10 border border-black rounded-2xl input-text placeholder-black focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm transition-all duration-300 group-hover:bg-white/15"
                             />
                             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <div className="w-2 h-2 bg-purple-400 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
@@ -250,11 +250,14 @@ const SignupPage = () => {
                             type="button"
                             onClick={handleRegistration}
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-semibold py-4 rounded-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 active:scale-95 relative overflow-hidden group"
+                            className={`w-full text-white font-semibold py-4 rounded-2xl relative overflow-hidden group
+        ${loading
+                                    ? 'bg-gray-400 cursor-not-allowed shadow-none'
+                                    : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:shadow-xl cursor-pointer'
+                                }`}
                         >
                             <span className="relative z-10 flex items-center justify-center">
-                                Create Account & Explore
-                                <Plane className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                                {loading ? "Registering Your Account...." : "Register"}
                             </span>
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </button>
@@ -262,9 +265,9 @@ const SignupPage = () => {
 
                     {/* Footer */}
                     <div className="text-center mt-6">
-                        <p className="text-black text-sm">
+                        <p className="text-sm">
                             Already have an account?{' '}
-                            <a href="/login" className="text-blue-800 font-medium hover:underline transition-all duration-300">
+                            <a href="/login" className="font-bolder font-medium hover:underline transition-all duration-300">
                                 Sign in here
                             </a>
                         </p>
