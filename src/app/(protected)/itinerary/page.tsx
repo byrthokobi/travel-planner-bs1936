@@ -325,7 +325,7 @@ export default function ItineraryPage() {
                                             <button
                                                 className="btn-secondary text-sm px-3 py-1"
                                                 onClick={() => {
-                                                    router.push(`/trips/${trip.id}`)
+                                                    router.push(`/itinerary/${trip.id}`)
                                                 }}>
                                                 View
                                             </button>
