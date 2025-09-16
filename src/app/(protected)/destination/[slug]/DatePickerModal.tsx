@@ -1,5 +1,6 @@
 "use client"
 
+import ModernDatePicker from "@/components/Modern-DatePicker";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { DatePicker, DateRange, DateRangePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
@@ -49,8 +50,11 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
                 })
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error(`Failed to save trip: ${response.statusText}`);
+                toast.error(data.error || `Failed to save trip: ${response.statusText}`);
+                return;
             }
 
             toast.success("Trip Added Successfully!");
@@ -72,39 +76,44 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
                 Add Destination
             </button>
 
-            <Modal open={open} onClose={() => setOpen(false)}>
+            <Modal
+                open={open} onClose={() => setOpen(false)}
+            >
                 <Box
                     className="modal-body"
                 >
-                    <h5 className="modal-text mb-4">
+                    <h4 className="modal-text mb-5">
                         Select Trip Dates
-                    </h5>
+                    </h4>
 
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            label="Start Date"
-                            value={startDate}
-                            onChange={(newDate) => setStartDate(newDate)}
-                            disablePast
-                        />
-                        <DatePicker
-                            label="End Date"
-                            value={endDate}
-                            onChange={(newDate) => setEndDate(newDate)}
-                            disablePast
-                            minDate={startDate || undefined}
-                            sx={{ mt: 2 }}
-                        />
-                    </LocalizationProvider>
+                    <ModernDatePicker
+                        label="Start Date"
+                        value={startDate}
+                        onChange={(newDate) => setStartDate(newDate)}
+                    />
+
+                    <ModernDatePicker
+                        label="End Date"
+                        value={endDate}
+                        onChange={(newDate) => setEndDate(newDate)}
+                    />
 
 
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-                        <Button onClick={() => setOpen(false)} sx={{ mr: 2 }} disabled={saving}>
+                        <button
+                            onClick={() => setOpen(false)}
+                            style={{ marginRight: "12px" }}
+                            className="btn-secondary"
+                            disabled={saving}
+                        >
                             Cancel
-                        </Button>
-                        <Button variant="contained" onClick={handleSave} disabled={saving || !startDate || !endDate}>
+                        </button>
+                        <button
+                            onClick={handleSave}
+                            className="btn-primary"
+                            disabled={saving || !startDate || !endDate}>
                             {saving ? "Saving..." : "Save"}
-                        </Button>
+                        </button>
                     </Box>
                 </Box>
             </Modal>

@@ -11,6 +11,37 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // 14-day limit
+    const diffDays = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays > 14) {
+      return NextResponse.json(
+        { error: "Trips cannot exceed 14 days." },
+        { status: 400 }
+      );
+    }
+
+    // check overlapping trips
+    const overlap = await prisma.trip.findFirst({
+      where: {
+        user_id: Number(userId),
+        AND: [
+          {
+            startDate: { lte: end },
+            endDate: { gte: start },
+          },
+        ],
+      },
+    });
+
+    if (overlap) {
+      return NextResponse.json(
+        { error: "Your selected dates overlap with another trip." },
+        { status: 400 }
+      );
+    }
     
     const trip = await prisma.trip.create({
       data: {
@@ -22,7 +53,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(trip);
+    return NextResponse.json(trip, {status: 201});
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Failed to create trip" }, { status: 500 });
