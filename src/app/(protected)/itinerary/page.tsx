@@ -164,6 +164,8 @@ export default function ItineraryPage() {
                 return { ...data, pages: updatedPages };
             });
 
+            queryClient.invalidateQueries({ queryKey: ["trips"] });
+
             toast.success("The Trip is Successfully Deleted");
             closeDeleteModal();
         },
