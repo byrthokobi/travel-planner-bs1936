@@ -6,9 +6,9 @@ import { ArrowLeft } from "lucide-react";
 export default function TripDetails({ trip }: { trip: any }) {
     return (
         <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+            <div className="text-2xl font-bold text-gray-800 mb-4 text-center">
                 Trip Details
-            </h2>
+            </div>
 
             <div className="space-y-3">
                 <Detail label="Trip ID" value={trip.id} />

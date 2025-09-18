@@ -7,7 +7,7 @@ import {PrismaAdapter} from "@auth/prisma-adapter"
 
 
 export const { auth, handlers, signIn } = NextAuth({
-    adapter: PrismaAdapter(prisma),
+    // adapter: PrismaAdapter(prisma),
     session: {
         strategy: "jwt",
     },
@@ -52,6 +52,7 @@ export const { auth, handlers, signIn } = NextAuth({
                 return { id: user.id.toString(), email: user.email, name: user.fullname ?? null };
             }
         }),
+
     ],
     callbacks: {
     async jwt({ token, user }) {
@@ -71,4 +72,9 @@ export const { auth, handlers, signIn } = NextAuth({
       return session;
     },
   },
+  pages: {
+    signIn: '/login',
+    error: '/login',
+  },
+  debug: process.env.NODE_ENV === 'development',
 });

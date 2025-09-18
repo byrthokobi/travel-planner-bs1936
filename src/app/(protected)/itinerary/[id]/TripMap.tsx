@@ -127,8 +127,8 @@ export default function TripMap({ location }: TripMapProps) {
     return (
         <div className="bg-white rounded-lg shadow-sm h-full overflow-hidden">
             <div className="p-4 border-b">
-                <h3 className="text-lg font-semibold text-gray-800">Location</h3>
-                <p className="text-gray-600">{location}</p>
+                <div className="text-2xl font-semibold text-gray-800">Location</div>
+                <div className="text-l text-gray-600">{location}</div>
             </div>
             <MapContainer
                 center={position}

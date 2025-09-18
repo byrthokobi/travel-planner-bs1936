@@ -158,8 +158,28 @@ h3 {
   color: white;
 }
 
+.btn-sign {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: white;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
+}
+
+.btn-sign:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.35);
+  background: #86dbff;
+}
 .dark .login-form {
   background: #39445c;
+  color: rgb(255, 255, 255) !important;
 }
 
 .dark ::placeholder {

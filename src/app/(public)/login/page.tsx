@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { signIn, useSession } from "next-auth/react";
 import { redirect, useRouter } from 'next/navigation';
-import { Globe, MapPin, Plane } from 'lucide-react';
+import { Github, Globe, MapPin, Plane } from 'lucide-react';
 import Link from 'next/link';
 
 const LoginPage = () => {
@@ -78,6 +78,13 @@ const LoginPage = () => {
 
                     {/* Form */}
                     <div className="space-y-5">
+                        <div className="relative-group">
+                            <button
+                                className="btn-sign"
+                                onClick={() => signIn("github", { callbackUrl: "/" })}>
+                                Login With GitHub <Github />
+                            </button>
+                        </div>
                         <div className="relative group">
                             <input
                                 type="email"
