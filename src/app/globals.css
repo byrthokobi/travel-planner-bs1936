@@ -678,6 +678,21 @@ h3 {
   }
 }
 
+/* Trip Details Section */
+.trip-page {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-around;
+  margin: auto;
+}
+
+.trip-page .map {
+  height: 400px;
+  background: whitesmoke;
+  width: 400px;
+  padding: 50px;
+}
+
 /* Utility Classes */
 .text-gradient {
   background: var(--travel-gradient);
