@@ -6,7 +6,7 @@ import ThemeToggle from './ThemeToggle';
 
 export const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { data: session, status } = useSession();
+    const { status } = useSession();
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };

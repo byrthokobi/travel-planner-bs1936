@@ -1,17 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, MapPin, Users, Settings, X } from "lucide-react";
+import { Calendar, MapPin, X } from "lucide-react";
 import TripCalendar from "./TripCalendar";
+import { TripProps } from "./page";
 
 interface TripCoverProps {
-    trip: {
-        id: number;
-        location: string;
-        startDate: Date;
-        endDate: Date;
-        createdAt: Date;
-    };
+    trip: TripProps;
     startDate: Date;
     endDate: Date;
 }

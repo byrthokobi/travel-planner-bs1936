@@ -3,7 +3,6 @@ import GitHub from "next-auth/providers/github"
 import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
-import {PrismaAdapter} from "@auth/prisma-adapter"
 
 
 export const { auth, handlers, signIn } = NextAuth({

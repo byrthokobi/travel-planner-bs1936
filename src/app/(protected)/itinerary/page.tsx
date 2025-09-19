@@ -1,13 +1,12 @@
 "use client";
 
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { ArrowDown, ArrowUp, MapPin, Plus, Trash2, X } from "lucide-react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 
 interface Trip {
@@ -20,6 +19,11 @@ interface Trip {
     createdAt: string;
 }
 
+interface TripsPage {
+    trips: Trip[];
+    hasMore: boolean;
+}
+
 
 interface DeleteModalProps {
     isOpen: boolean;
@@ -28,7 +32,7 @@ interface DeleteModalProps {
     tripLocation: string;
 }
 
-async function fetchTrips({ pageParam = 0 }): Promise<{ trips: Trip[]; hasMore: boolean }> {
+async function fetchTrips({ pageParam = 0 }: { pageParam?: number }): Promise<TripsPage> {
     try {
         const res = await fetch(`/api/trips?offset=${pageParam}&limit=7`);
         if (!res.ok) throw new Error("Failed to Load Trips");
@@ -115,7 +119,6 @@ function DeleteModal({ isOpen, onClose, onConfirm, tripLocation }: DeleteModalPr
 }
 
 export default function ItineraryPage() {
-    const { data: session, status } = useSession();
     const router = useRouter();
     const queryClient = useQueryClient();
 
@@ -147,25 +150,24 @@ export default function ItineraryPage() {
                 : undefined,
     });
 
+
     const trips: Trip[] = data?.pages.flatMap((p) => p.trips) ?? [];
-    //Todo - Invalid Query
 
     const mutation = useMutation({
         mutationFn: deleteTrip,
-        onSuccess: (id) => {
-            queryClient.setQueryData(["trips"], (data: any) => {
-                if (!data) return data;
+        onSuccess: (id: number) => {
+            queryClient.setQueryData<{ pages: TripsPage[] } | undefined>(["trips"], (oldData) => {
+                if (!oldData) return oldData;
 
-                const updatedPages = data.pages.map((page: any) => ({
+                const updatedPages = oldData.pages.map((page) => ({
                     ...page,
-                    trips: page.trips.filter((trip: Trip) => trip.id !== id),
+                    trips: page.trips.filter((trip) => trip.id !== id),
                 }));
 
-                return { ...data, pages: updatedPages };
+                return { ...oldData, pages: updatedPages };
             });
 
             queryClient.invalidateQueries({ queryKey: ["trips"] });
-
             toast.success("The Trip is Successfully Deleted");
             closeDeleteModal();
         },

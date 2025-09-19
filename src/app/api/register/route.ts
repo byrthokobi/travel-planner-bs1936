@@ -4,6 +4,11 @@ import z from "zod";
 import bcrypt from 'bcrypt';
 import { v2 as cloudinary } from 'cloudinary';
 
+type CloudinaryResult = {
+  secure_url: string;
+  public_id: string;
+};
+
 const registerSchema = z.object({
   email: z.string().email('Must be a valid email'),
   fullname: z.string().min(2, 'Name must be at least 2 characters'),
@@ -48,15 +53,16 @@ export async function POST(req: Request) {
     const arrayBuffer = await avatar.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const cloudinaryUpload = () => new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream({ folder: 'avatars' }, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
+    const cloudinaryUpload = (): Promise<CloudinaryResult> =>
+      new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({ folder: "avatars" }, (err, result) => {
+          if (err) reject(err);
+          else resolve(result as CloudinaryResult);
+        });
+        stream.end(buffer);
       });
-      stream.end(buffer);
-    });
 
-    const result: any = await cloudinaryUpload();
+    const result = await cloudinaryUpload();
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await prisma.user.create({
@@ -64,9 +70,9 @@ export async function POST(req: Request) {
         email,
         fullname,
         password: hashedPassword,
-        avatar: result.secure_url,
-        sex,
-        country,
+        avatar: result?.secure_url ?? null,
+        sex: sex,
+        country: country,
       },
     });
 

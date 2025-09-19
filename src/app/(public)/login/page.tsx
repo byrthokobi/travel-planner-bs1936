@@ -1,13 +1,12 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { signIn, useSession } from "next-auth/react";
-import { redirect, useRouter } from 'next/navigation';
+import React, { useState } from 'react'
+import { signIn } from "next-auth/react";
+import { useRouter } from 'next/navigation';
 import { Github, Globe, MapPin, Plane } from 'lucide-react';
 import Link from 'next/link';
 
 const LoginPage = () => {
-    const { data: session, status } = useSession();
     const router = useRouter();
 
     const [email, setEmail] = useState("");
@@ -22,7 +21,7 @@ const LoginPage = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        let newErrors: typeof errors = {};
+        const newErrors: typeof errors = {};
         if (!email) newErrors.email = 'Please Enter Your Email';
         if (!password) newErrors.password = 'Please Enter Your Password'
 
@@ -72,7 +71,7 @@ const LoginPage = () => {
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <Plane className="w-8 h-8 text-white rotate-12" />
                         </div>
-                        <h2 className="text-2xl font-bold text-white mb-2">Let's Plan Trips</h2>
+                        <h2 className="text-2xl font-bold text-white mb-2">Lets Plan Trips</h2>
                         <p className="text-white/80 text-sm">Login and start exploring</p>
                     </div>
 
@@ -114,6 +113,8 @@ const LoginPage = () => {
                             {errors.password && <p className="text-red-700 font-bold text-sm text-center mt-2">{errors.password}</p>}
                         </div>
 
+                        {error && <p className="text-red-700 font-bold text-sm text-center mt-2">{error}</p>}
+
                         {/* Sign In Button */}
                         <button
                             type="submit"
@@ -136,7 +137,7 @@ const LoginPage = () => {
                     {/* Footer */}
                     <div className="text-center mt-6">
                         <p className="text-sm">
-                            Don't have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <Link href="/registration" className="font-bold font-medium hover:underline transition-all duration-300">
                                 Register here
                             </Link>

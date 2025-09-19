@@ -1,9 +1,7 @@
 "use client"
 
 import ModernDatePicker from "@/components/Modern-DatePicker";
-import { Box, Button, Modal, Typography } from "@mui/material";
-import { DatePicker, DateRange, DateRangePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
-import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { Box, Modal } from "@mui/material";
 import { Dayjs } from "dayjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -36,7 +34,7 @@ export default function DatePickerModal({ countryName, currentTemperature, userI
         setSaving(true);
 
         try {
-            let weatherSummary: string = currentTemperature;
+            const weatherSummary: string = currentTemperature;
 
             const response = await fetch("/api/trips", {
                 method: "POST",

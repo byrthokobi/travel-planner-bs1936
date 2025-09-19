@@ -1,10 +1,11 @@
-import { Box, Button, Card, CardContent, Container, Grid, Typography } from "@mui/material";
+import { Card, CardContent, Container, Typography } from "@mui/material";
 import WeatherChart from "./WeatherComponent";
 import DatePickerModal from "./DatePickerModal";
 import { auth } from "@/lib/auth";
 import { Clock, Flag, MapPin, Users } from "lucide-react";
 import { getCountryData } from "@/services/countryService/CountryData"
-import { getWeather } from "@/services/countryService/CountryWeather";
+import { getWeather, WeatherResponse } from "@/services/countryService/CountryWeather";
+import Image from "next/image";
 
 
 export default async function DestinationPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -15,13 +16,13 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
     const userId = session?.user?.id;
 
     const country = await getCountryData(countryName);
-    let weatherData: any = null;
-    let currentTemperature = 0;
+    let weatherData: WeatherResponse | null = null;
+    // let currentTemperature = 0;
     if (country?.lat && country?.lon) {
         weatherData = await getWeather(country?.lat, country?.lon);
-        if (weatherData && weatherData.current_weather) {
-            currentTemperature = weatherData.current_weather.temperature;
-        }
+        // if (weatherData && weatherData.current_weather) {
+        //     currentTemperature = weatherData.current_weather.temperature;
+        // }
     }
 
     return (
@@ -81,7 +82,9 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
                                 <div className="relative bg-white p-4 rounded-2xl shadow-lg border-2 border-gray-100 group-hover:border-gray-200 transition-colors duration-300">
-                                    <img
+                                    <Image
+                                        width={120}
+                                        height={80}
                                         src={country?.flag}
                                         alt={`${country?.name} flag`}
                                         className="w-24 h-16 sm:w-32 sm:h-20 object-cover rounded-lg shadow-sm"
@@ -123,14 +126,14 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
             </div>
 
 
-            <DatePickerModal countryName={countryName} currentTemperature={weatherData?.current_weather?.temperature} userId={Number(userId)} />
+            <DatePickerModal countryName={countryName} currentTemperature={String(weatherData?.current_weather?.temperature)} userId={Number(userId)} />
 
             {/* Weather Section */}
             {weatherData && (
                 <Card sx={{ marginTop: 4, background: "transparent" }}>
                     <CardContent className="weather-card">
                         <h2>Weather Forecast</h2>
-                        <Typography>Current: {weatherData.current_weather.temperature}°C</Typography>
+                        <Typography>Current: {weatherData.current_weather?.temperature}°C</Typography>
                         <WeatherChart forecast={weatherData.daily} />
                     </CardContent>
                 </Card>

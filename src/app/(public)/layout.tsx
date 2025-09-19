@@ -1,10 +1,15 @@
 'use client'
+import { Box, CircularProgress } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
-const layoutPublic: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { data: session, status } = useSession();
+interface LayoutPublicProps {
+    children: React.ReactNode;
+}
+
+const LayoutPublic: React.FC<LayoutPublicProps> = ({ children }) => {
+    const { status } = useSession();
     const router = useRouter();
 
 
@@ -14,11 +19,24 @@ const layoutPublic: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         }
     }, [status, router]);
 
-    if (status === "loading") return null;
+    if (status === 'loading') {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                }}
+            >
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <main>{children}</main>
     )
 }
 
-export default layoutPublic;
+export default LayoutPublic;

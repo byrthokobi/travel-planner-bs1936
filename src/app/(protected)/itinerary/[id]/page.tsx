@@ -1,9 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import TripCalendar from "./TripCalendar";
 import TripMap from "./TripMap";
 import TripDetails from "./TripDetails";
 import TripCover from "./TripCover";
+
+export interface TripProps {
+    id: number;
+    user_id: number;
+    location: string;
+    startDate: string;
+    endDate: string;
+    weatherSummary?: string;
+    createdAt: string;
+};
 
 export default async function TripPage({ params }: { params: { id: string } }) {
     const session = await auth();
@@ -12,7 +21,7 @@ export default async function TripPage({ params }: { params: { id: string } }) {
 
     if (isNaN(tripId)) return <NotFound message="Invalid trip ID" />;
 
-    const trip = await prisma.trip.findUnique({ where: { id: tripId } });
+    const trip = await prisma.trip.findUnique({ where: { id: tripId } }) as TripProps | null;
 
     if (!trip || trip.user_id !== Number(session?.user?.id)) {
         return <NotFound message="Trip not found" />;
@@ -23,8 +32,8 @@ export default async function TripPage({ params }: { params: { id: string } }) {
             {/* Cover Photo Section */}
             <TripCover
                 trip={trip}
-                startDate={trip.startDate}
-                endDate={trip.endDate}
+                startDate={new Date(trip.startDate)}
+                endDate={new Date(trip.endDate)}
             />
 
             {/* Main Content Layout */}
@@ -63,7 +72,6 @@ export default async function TripPage({ params }: { params: { id: string } }) {
     );
 }
 
-// ✅ Small component for handling missing trips
 function NotFound({ message }: { message: string }) {
     return <div className="text-center text-red-600 font-medium">{message}</div>;
 }

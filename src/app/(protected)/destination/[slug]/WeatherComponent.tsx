@@ -2,25 +2,32 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
 import { Thermometer } from 'lucide-react';
+import { DailyWeather } from '@/services/countryService/CountryWeather';
 
 interface TempData {
     max: number;
     min: number;
 }
 
-export default function WeatherChart({ forecast }: { forecast: any }) {
-    const data = forecast.time.map((date: string, i: number) => ({
+interface CustomTooltipProps {
+    active?: boolean;
+    payload?: { name: string; value: number; color: string }[];
+    label?: string;
+}
+
+export default function WeatherChart({ forecast }: { forecast: DailyWeather | undefined }) {
+    const data = forecast?.time.map((date: string, i: number) => ({
         date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         max: forecast.temperature_2m_max[i],
         min: forecast.temperature_2m_min[i]
-    }));
+    })) ?? [];
 
-    const CustomTooltip = ({ active, payload, label }: any) => {
-        if (active && payload && payload.length) {
+    const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+        if (active && payload?.length) {
             return (
                 <div className="bg-white rounded-lg shadow-lg border p-3">
                     <p className="text-gray-800 font-medium mb-1">{label}</p>
-                    {payload.map((entry: any, index: number) => (
+                    {payload.map((entry, index) => (
                         <p key={index} className="text-sm" style={{ color: entry.color }}>
                             {entry.name}: {entry.value}°C
                         </p>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { User, Mail, Globe, Users, MapPin, Edit3, Save, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface User {
     id: number;
@@ -52,8 +53,12 @@ export default function ProfileClient({ user: initialUser }: ProfileClientProps)
             setUser(prev => ({ ...prev, ...updatedUser }));
             toast.success('Profile updated successfully!');
             setIsEditing(false);
-        } catch (err: any) {
-            setError(err.message || 'An unexpected error occurred.');
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError('An unexpected error occurred.');
+            }
         } finally {
             setLoading(false);
         }
@@ -70,7 +75,9 @@ export default function ProfileClient({ user: initialUser }: ProfileClientProps)
                             <div className="relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32">
                                 {user.avatar ? (
                                     <div className="relative group w-full h-full">
-                                        <img
+                                        <Image
+                                            width={100}   // required
+                                            height={100}
                                             src={user.avatar}
                                             alt="Profile"
                                             className="rounded-2xl object-cover w-full h-full shadow-lg border-4 border-white"

@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { TripProps } from "./page"
 
-export default function TripDetails({ trip }: { trip: any }) {
+export default function TripDetails({ trip }: { trip: TripProps }) {
     return (
         <div>
             <div className="text-2xl font-bold text-gray-800 mb-4 text-center">

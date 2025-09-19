@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Plane, MapPin, Globe, User } from 'lucide-react';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 const SignupPage = () => {
 
@@ -13,7 +14,6 @@ const SignupPage = () => {
     const [sex, setSex] = useState('');
     const [country, setCountry] = useState('');
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState('');
     const [errors, setErrors] = useState<{
         avatar?: string
         fullname?: string
@@ -23,7 +23,7 @@ const SignupPage = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        let newErrors: typeof errors = {};
+        const newErrors: typeof errors = {};
 
         if (!file) {
             setAvatar(null);
@@ -53,8 +53,7 @@ const SignupPage = () => {
 
     const handleRegistration = async () => {
         setLoading(true);
-        setSuccess('');
-        let newErrors: typeof errors = {};
+        const newErrors: typeof errors = {};
 
         if (!avatar) newErrors.avatar = 'Please upload a profile picture.';
         if (!email) newErrors.email = 'Please provide email.';
@@ -92,7 +91,6 @@ const SignupPage = () => {
             if (!res.ok) {
                 setErrors({ email: data.error || 'Something went wrong' });
             } else {
-                setSuccess('Account created successfully!');
                 toast.success('Your Account Has Been Created Successfully')
                 window.location.href = '/login'
             }
@@ -139,7 +137,7 @@ const SignupPage = () => {
                         <label htmlFor="avatar-upload" className="relative cursor-pointer">
                             <span className="inline-block w-24 h-24 rounded-full overflow-hidden border-2 border-white/50 transition-all duration-300 group hover:scale-110 shadow-lg">
                                 {avatar ? (
-                                    <img src={URL.createObjectURL(avatar)} alt="Avatar Preview" className="h-full w-full object-cover" />
+                                    <Image src={URL.createObjectURL(avatar)} alt="Avatar Preview" className="h-full w-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center bg-white/10 text-white/50">
                                         *<User className="w-12 h-12" />

@@ -89,6 +89,7 @@ export async function GET(req: Request) {
       hasMore: offset + trips.length < totalCount,
     });
   } catch (error) {
+    console.error("Trip Fetching Error: ", error);
     return NextResponse.json({ error: "Failed to fetch trips" }, { status: 500 });
   }
 }
@@ -100,6 +101,7 @@ export async function DELETE(req: Request) {
     await prisma.trip.delete({ where: { id: tripId } });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("Delete Error: ", error);
     return NextResponse.json({ error: "Failed to delete trip" }, { status: 500 });
   }
 }

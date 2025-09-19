@@ -1,9 +1,9 @@
 'use client'
 
-import { Button, Container, Typography, Box, TextField, CircularProgress, List, ListItem, ListItemText, ListItemButton } from "@mui/material";
+import { Container, Typography, Box, TextField, CircularProgress, List, ListItemButton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { signOut, useSession } from "next-auth/react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Country {
@@ -24,7 +24,7 @@ const fetchCountries = async (query: string): Promise<(Country[])> => {
         const data = await res.json();
         if (!Array.isArray(data)) return [];
 
-        const countries = data.map((country: any) => ({
+        const countries = data.map((country) => ({
             name: country.name.common,
             officialName: country.name.official,
             capital: country.capital ? country.capital[0] : "N/A",
@@ -57,7 +57,7 @@ const DashboardPage = () => {
     const [isNavigating, setIsNavigating] = useState(false);
 
 
-    const { data: results = [], isFetching, isError, isLoading, error } = useQuery({
+    const { data: results = [], isFetching, isError, isLoading } = useQuery({
         queryKey: ["countries", initialQuery],
         queryFn: () => fetchCountries(initialQuery),
         enabled: initialQuery.length > 0,
@@ -151,10 +151,13 @@ const DashboardPage = () => {
                                 Official Name: ${country?.officialName}`}</p>
                                     </div>
                                     {country.flag && (
-                                        <img
+                                        <Image
+
+                                            width={30}
+                                            height={50}
                                             src={country.flag}
                                             alt={country.name}
-                                            style={{ width: "30px", marginLeft: "10px" }}
+                                            style={{ marginLeft: "10px" }}
                                         />
                                     )}
                                 </ListItemButton>
